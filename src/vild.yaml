@@ -1,7 +1,0 @@
----
-jszip: /Users/Kashomon/Desktop/CurrentProjects/otre/otre_goban/js/jszip.py
-build: !$vild:jszip -q
-build_debug: !$vild:jszip -d
-build_full: !$vild:jszip
-run: !open /Users/Kashomon/Desktop/CurrentProjects/otre/otre_goban/js/GoDisplay.html
----
