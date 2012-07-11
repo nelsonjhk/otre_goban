@@ -4,22 +4,13 @@ var util = otre.util;
 var log = otre.logger;
 var enums = otre.enums;
 
-// A new implementation.
-(function() {
-otre.goban = {
+// <otre_lib>
+(function(){
+otre.rules.goban = {
   getInstance: function(intersections) {
     var ints = intersections || 19;
     return new Goban(ints);
   }
-};
-
-var logz = function(msg) {
-  var modmsg = msg;
-  if (otre.util.typeOf(msg) === "array" ||
-      otre.util.typeOf(msg) === "object") {
-    modmsg = JSON.stringify(msg);
-  }
-  console.log("" + modmsg);
 };
 
 // Goban tracks the state of the stones.
@@ -94,7 +85,10 @@ Goban.prototype = {
   // [ 0 ]
   addStone: function(pt, color) {
     if (!util.colors.isLegalColor(color)) throw "Unknown color: " + color;
-    if (this.outBounds(pt) || !this.placeable(pt)) return [0];
+
+    // Add stone fail.  Return a failed StoneResult.
+    if (this.outBounds(pt) || !this.placeable(pt))
+      return new StoneResult(false);
 
     this._setColor(pt, color); // set stone as active
     var captures = new CaptureTracker();
@@ -106,20 +100,23 @@ Goban.prototype = {
     this._getCaptures(captures, util.point(pt.x, pt.y + 1), oppColor);
 
     if (captures.numCaptures <= 0) {
-      // Check if move is self capture.
+      // We are now in a state where placing this stone results in 0 liberties.
+      // Now, we check if move is self capture -- i.e., if the move doesn't
+      // capture any stones.
       this._getCaptures(captures, pt, color);
       if (captures.numCaptures > 0) {
         // Onos! The move is self capture.
         this.clearStone(pt);
-        return [0];
+        return new StoneResult(false);
       }
     }
 
     var actualCaptures = captures.getCaptures();
+    // Remove the captures from the board.
     this.clearSome(actualCaptures);
-    actualCaptures.splice(0, 0, 1);
-    return actualCaptures;
+    return new StoneResult(true, actualCaptures);
   },
+
   // Get the captures.  We return nothing because state is stored in 'captures'
   _getCaptures: function(captures, pt, color) {
     this._findConnected(captures, pt, color);
@@ -167,7 +164,7 @@ Goban.prototype = {
   }
 }
 
-// Utility functions
+// Utiity functions
 
 // Private function to initialize the stones.
 var initStones = function(ints) {
@@ -225,8 +222,20 @@ CaptureTracker.prototype = {
     }
     return out;
   }
-}
-;
-})();
+};
 
+// The stone result keeps track of whether placing a stone was successful and what
+// stones (if any) were captured.
+// It is only ever returned by th
+var StoneResult = function(success, captures) {
+  this.successful = success;
+  if (success) {
+    this.captures = captures;
+  } else {
+    this.captures = [];
+  }
+};
+
+})();
+// </otre_lib>
 })();

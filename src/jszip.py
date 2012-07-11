@@ -18,34 +18,24 @@ HEADER = "<otre_lib>"
 FOOTER = "</otre_lib>"
 
 filelist = [
-    "enums",
-    "util",
-    "precond",
-    "logger",
-    "handlers",
-    "sgf_grammar",
-    "stones",
-    "newrules",
-    "gostone",
-    "sgflogic",
-    "rutil",
-    "themes/themes",
-    "themes/std",
-    "raphael/otre_raphael",
-    "raphael/rutil",
-    "raphael/goboard",
-    "raphael/actionwindow",
-    "raphael/arrow",
-    "raphael/qmark",
-    "raphael/arrowcirc",
-    "raphael/button",
-    "raphael/rgostone",
-    "raphael/optionstab",
-    "raphael/menubar",
-    "raphael/simplearrows",
-    "display",
+    # Top Level
+    "otre",
     "instance",
-    "board_methods"
+
+    # Utility packages
+    "util/enums",
+    "util/util",
+    "util/logger",
+
+    # SGF Utilities
+    "sgf/sgf",
+    "sgf/sgf_grammar",
+
+    # Rules
+    "rules/rules",
+    "rules/goban",
+    "rules/movetree",
+    "rules/problem_logic",
     ]
 
 # Get the entire list of javascript files, recursively
@@ -85,7 +75,7 @@ def replacer(filename, transform):
   out_file.close()
 
 def pegjs_trans(cont):
-  contents = cont.replace("module.exports", "// <otre_lib>\notre.parser")
+  contents = cont.replace("module.exports", "// <otre_lib>\notre.sgf.parser")
   contents += "\n// </otre_lib>"
   return contents
 

@@ -1,4 +1,3 @@
-(function() {
 var util = otre.util;
  
 otre.util_test = function() {
@@ -10,6 +9,3 @@ otre.util_test = function() {
     ok(util.inBounds(5, 19), "inbounds: 5 on 19");
   });
 };
-
-
-})();

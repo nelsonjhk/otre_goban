@@ -1,39 +1,18 @@
 <html>
-
   <head>
     <title> Otre </title>
-    <script type="text/javascript" src="libs/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="libs/jquery-1.7.2.min.js"></script>
     <script type="text/javascript" src="libs/raphael-min.js"></script>
     <script type="text/javascript" src="otre.js"></script>
-    <script type="text/javascript" src="enums.js"></script>
-    <script type="text/javascript" src="precond.js"></script>
-    <script type="text/javascript" src="util.js"></script>
-    <script type="text/javascript" src="logger.js"></script>
-    <script type="text/javascript" src="rules/handlers.js"></script>
+    <script type="text/javascript" src="util/enums.js"></script>
+    <script type="text/javascript" src="util/util.js"></script>
+    <script type="text/javascript" src="util/logger.js"></script>
+
+    <!-- Rules -->
+    <script type="text/javascript" src="rules/rules.js"></script>
     <script type="text/javascript" src="rules/sgf_grammar.js"></script>
-    <script type="text/javascript" src="rules/stones.js"></script>
-    <script type="text/javascript" src="rules/newrules.js"></script>
-    <script type="text/javascript" src="rules/gostone.js"></script>
-    <script type="text/javascript" src="rules/sgflogic.js"></script>
-    <script type="text/javascript" src="rules/board_methods.js"></script>
-    <script type="text/javascript" src="themes/themes.js"></script>
-    <script type="text/javascript" src="themes/std.js"></script>
-    <script type="text/javascript" src="raphael/otre_raphael.js"></script>
-    <script type="text/javascript" src="raphael/rutil.js"></script>
-    <script type="text/javascript" src="raphael/goboard.js"></script>
-    <script type="text/javascript" src="raphael/actionwindow.js"></script>
-    <script type="text/javascript" src="raphael/arrow.js"></script>
-    <script type="text/javascript" src="raphael/qmark.js"></script>
-    <script type="text/javascript" src="raphael/arrowcirc.js"></script>
-    <script type="text/javascript" src="raphael/button.js"></script>
-    <script type="text/javascript" src="raphael/rgostone.js"></script>
-    <script type="text/javascript" src="raphael/optionstab.js"></script>
-    <script type="text/javascript" src="raphael/menubar.js"></script>
-    <script type="text/javascript" src="raphael/simplearrows.js"></script>
-    <script type="text/javascript" src="display.js"></script>
-    <script type="text/javascript" src="instance.js"></script>
-    <!-- V2 -->
     <script type="text/javascript" src="rules/goban.js"></script>
+    <!-- V2 -->
 
     <!-- <script type="text/javascript" src="otre_client.js"></script> -->
     <!-- <script type="text/javascript" src="otre_compiled.js"></script> -->
@@ -77,6 +56,7 @@
           "C[Alive])(;B[pb];W[qa]C[Dead]))(;B[qa]C[Incorrect];W[pa];B[qb]C[Dead])" +
           "(;B[qb]C[Incorrect];W[pa]))"
 
+          /*
           var sgfurl = "sgfs/easy.sgf";
           var new_instance = otre.instance({
             otreDivId: "otre_display",
@@ -88,6 +68,7 @@
             theme: "std"
           });
           new_instance.loadSgfProblems("sgfs/misc", "sgf_list.js");
+          */
 
         </script>
       </div>

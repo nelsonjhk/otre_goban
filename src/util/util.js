@@ -1,7 +1,17 @@
 (function() {
+var enums = otre.enums;
 
 // <otre_lib>
 otre.util = {
+  logz: function(msg) {
+    var modmsg = msg;
+    if (otre.util.typeOf(msg) === "array" ||
+        otre.util.typeOf(msg) === "object") {
+      modmsg = JSON.stringify(msg);
+    }
+    console.log("" + modmsg);
+  },
+
   // returns true if a number is inside a bounds (non-inclusive) and not
   // negative
   notDefined: function(msg) {
@@ -195,7 +205,7 @@ otre.util.pointFromString = function(str) {
 
 otre.util.pointFromHash = function(int) {
   if (typeof(int) != "number" && typeof(int) != "string") {
-    throw "Parsing error. int required, but found: " + int + 
+    throw "Parsing error. int required, but found: " + int +
         "\nTypof: " + typeof(int);
   }
   if (typeof(int) == "string") {
