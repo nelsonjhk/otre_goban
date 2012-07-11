@@ -46,10 +46,12 @@ otre.util = {
     return x;
   },
 
+  // Checks to make sure a number is inbounds
   inBounds: function(num, bounds) {
     return ((num < bounds) && (num >= 0));
   },
 
+  // Checks to make sure a number is out-of-bounds
   // returns true if a number is outside a bounds (inclusive) or negative
   outBounds: function(num, bounds) {
     return ((num >= bounds) || (num < 0));

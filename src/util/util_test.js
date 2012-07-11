@@ -6,6 +6,6 @@ otre.util_test = function() {
   });
 
   test("inbounds", function() {
-    ok(util.inBounds(5, 19), "inbounds: 5 on 19");
+    ok(util.inBounds(5, 19), "5 should be between 0 and 19");
   });
 };
