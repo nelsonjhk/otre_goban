@@ -80,9 +80,9 @@ def pegjs_trans(cont):
   return contents
 
 def compile_pegjs():
-  pegjs_call = "pegjs rules/sgf_grammar.pegjs"
+  pegjs_call = "pegjs sgf/sgf_grammar.pegjs"
   out, err = subprocess.Popen(pegjs_call, shell=True).communicate()
-  replacer("sgf_grammar.js", pegjs_trans)
+  replacer("sgf/sgf_grammar.js", pegjs_trans)
 
 def comment_jsimp(cont, fname):
   return cont.replace(
@@ -142,12 +142,18 @@ def replace_godisplay_compiled():
 ########
 
 def main(argv=None):
+  if sys.argv[1] == "--pegjs_only":
+    compile_pegjs()
+    return
+
+  return
+    
+
   thispath = os.path.dirname(os.path.realpath(__file__))
   os.chdir(thispath)
 
   file_list = get_file_list(thispath)
 
-  compile_pegjs()
 
   closure_call = ("java -jar /Users/Kashomon/Desktop/CurrentProjects"
       "/libraries/closure.jar --js otre_client.js "

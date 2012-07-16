@@ -1,10 +1,9 @@
-var movetree = otre.rules.movetree;
-var testsgfs = otre.testdata.sgfs;
+var movetree = otre.sgf.movetree;
+var sgfs = testdata.sgfs;
 
-otre.movetree_test = function() {
-  test("simple parsing a token retrieval", function() {
-    //TODO(jh): finish this
-    equal(true, true, "");
-    ok(true, "");
+otre.sgf.movetree_test = function() {
+  test("that parsing works", function() {
+    movetree.getFromSgf(sgfs.veryeasy)
+    ok(true, "shouldn't throw an exception");
   });
 };

@@ -32,14 +32,15 @@ var enums = otre.enums;
  * Each move is an object with two properties: tokens and moves, the
  * latter of which is a list to capture the idea of multiple variations.
  */
-otre.rules.movetree = {
+otre.sgf.movetree = {
   // Create an empty MoveTree
   getInstance: function() {
     return new MoveTree(this._createNewMove());
   },
 
   // Create a MoveTree from an SGF.
-  getFromSgfString: function(sgfString) {
+  getFromSgf: function(sgfString) {
+    console.log(sgfString);
     return new MoveTree(otre.sgf.parser.parse($.trim(sgfString)));
   },
 
@@ -59,12 +60,12 @@ var MoveTree = function(parsedSgf) {
   // The moveHistory serves two purposes -- it allows travel backwards (i.e.,
   // up the tree), and it gives the current move, which is the last move in the
   // array.
-  this._moveHistory = [].push(this._parsedSgf);
+  this._moveHistory = ([]).push(this._parsedSgf);
 };
 
-MoveTree.prototype = function() {
+MoveTree.prototype = {
   getCurrentMove: function() {
-    return this._moveHistory[this._moveHistory.length() - 1];
+    return this._moveHistory[this._moveHistory.length - 1];
   },
 
   //TODO

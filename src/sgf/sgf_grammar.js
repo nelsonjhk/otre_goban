@@ -143,8 +143,8 @@ otre.sgf.parser = (function(){
           pos = savedPos1;
         }
         var result2 = result1 !== null
-          ? (function(tokens, pmoves) { 
-            return { data: tokens, moves: pmoves }; 
+          ? (function(tokens, pmoves) {
+            return { data: tokens, moves: pmoves };
           })(result1[1], result1[2])
           : null;
         if (result2 !== null) {
@@ -471,8 +471,8 @@ otre.sgf.parser = (function(){
           pos = savedPos2;
         }
         var result6 = result5 !== null
-          ? (function(tokens, variations) { 
-                    return { data: tokens, moves: variations }; 
+          ? (function(tokens, variations) {
+                    return { data: tokens, moves: variations };
                   })(result5[1], result5[2])
           : null;
         if (result6 !== null) {
@@ -615,7 +615,7 @@ otre.sgf.parser = (function(){
         }
         var result2 = result1 !== null
           ? (function(token, data, more, tokens) {
-            tokens[token] = [data].concat(more); 
+            tokens[token] = [data].concat(more);
             return tokens;
           })(result1[0], result1[2], result1[5], result1[7])
           : null;
@@ -693,6 +693,7 @@ otre.sgf.parser = (function(){
         
         
         var savedPos0 = pos;
+        var result1 = [];
         if (input.substr(pos, 2) === "\\]") {
           var result5 = "\\]";
           pos += 2;
@@ -720,43 +721,40 @@ otre.sgf.parser = (function(){
             var result3 = null;;
           };
         }
-        if (result3 !== null) {
-          var result1 = [];
-          while (result3 !== null) {
-            result1.push(result3);
-            if (input.substr(pos, 2) === "\\]") {
-              var result5 = "\\]";
-              pos += 2;
-            } else {
-              var result5 = null;
-              if (reportMatchFailures) {
-                matchFailed("\"\\\\]\"");
-              }
-            }
-            if (result5 !== null) {
-              var result3 = result5;
-            } else {
-              if (input.substr(pos).match(/^[^\]]/) !== null) {
-                var result4 = input.charAt(pos);
-                pos++;
-              } else {
-                var result4 = null;
-                if (reportMatchFailures) {
-                  matchFailed("[^\\]]");
-                }
-              }
-              if (result4 !== null) {
-                var result3 = result4;
-              } else {
-                var result3 = null;;
-              };
+        while (result3 !== null) {
+          result1.push(result3);
+          if (input.substr(pos, 2) === "\\]") {
+            var result5 = "\\]";
+            pos += 2;
+          } else {
+            var result5 = null;
+            if (reportMatchFailures) {
+              matchFailed("\"\\\\]\"");
             }
           }
-        } else {
-          var result1 = null;
+          if (result5 !== null) {
+            var result3 = result5;
+          } else {
+            if (input.substr(pos).match(/^[^\]]/) !== null) {
+              var result4 = input.charAt(pos);
+              pos++;
+            } else {
+              var result4 = null;
+              if (reportMatchFailures) {
+                matchFailed("[^\\]]");
+              }
+            }
+            if (result4 !== null) {
+              var result3 = result4;
+            } else {
+              var result3 = null;;
+            };
+          }
         }
         var result2 = result1 !== null
-          ? (function(data) { return data.join(""); })(result1)
+          ? (function(data) { 
+            return data.join(""); 
+          })(result1)
           : null;
         if (result2 !== null) {
           var result0 = result2;
@@ -947,7 +945,7 @@ otre.sgf.parser = (function(){
           };
         }
         var result2 = result1 !== null
-          ? (function(name) { 
+          ? (function(name) {
             if (name.length === 1) return name[0];
             else return name.join("").toUpperCase();
           })(result1)
