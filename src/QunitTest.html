@@ -23,13 +23,15 @@
 <script type="text/javascript" src="rules/goban_test.js"></script>
 
 <script type="text/javascript" src="sgf/sgf.js"></script>
+<script type="text/javascript" src="sgf/props.js"></script>
 <script type="text/javascript" src="sgf/sgf_grammar.js"></script>
 <script type="text/javascript" src="sgf/movetree.js"></script>
 <script type="text/javascript" src="sgf/movetree_test.js"></script>
 
 
 <script>
-$(document).ready(function(){
+$(document).ready(function() {
+  otre.debugOn = true;
   otre.util_test();
   otre.rules.goban_test();
   otre.sgf.movetree_test();

@@ -215,6 +215,29 @@ otre.util.pointFromHash = function(int) {
   }
   return otre.util.point((int / 100 << 0) - 1, (int % 100) - 1);
 };
+
+// A better logging solution.
+otre.util.debugl = function(msg) {
+  if (otre.debugOn) {
+    var modmsg = msg;
+    if (otre.util.typeOf(msg) === "array" ||
+        otre.util.typeOf(msg) === "object") {
+      modmsg = JSON.stringify(msg);
+    }
+    console.log(msg);
+  }
+};
+
+var None = function() {}
+None.prototype = {
+  toString: function() {
+    return "None";
+  }
+};
+
+otre.util.none = new None();
+
+
 // </otre_lib>
 
 })();

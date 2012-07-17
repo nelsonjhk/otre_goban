@@ -2,7 +2,6 @@
 
 // <otre_lib>
 
-// Logging stuff
 otre.logger = function(logDiv, numMsgs) {
   return new otre.Log(logDiv, numMsgs);
 };

@@ -8,18 +8,18 @@ var enums = otre.enums;
  * When an SGF is parsed by the parser, it is transformed into the following:
  *
  * {
- *  tokens: {
+ *  data: {
  *    AW: [...],
  *    AB: [...],
  *    KM: [...],
  *  },
  *  moves: [
  *    {
- *      tokens: { B: [...], C: [...] },
+ *      data: { B: [...], C: [...] },
  *      moves: [...],
  *    },
  *    {
- *      tokens: { B: [...], C: [...] },
+ *      data: { B: [...], C: [...] },
  *      moves: [...],
  *    }
  *  ]
@@ -40,13 +40,14 @@ otre.sgf.movetree = {
 
   // Create a MoveTree from an SGF.
   getFromSgf: function(sgfString) {
-    console.log(sgfString);
     return new MoveTree(otre.sgf.parser.parse($.trim(sgfString)));
   },
 
   _createNewMove: function() {
     return { tokens: {}, moves: [] };
-  }
+  },
+
+   
 };
 
 // A MoveTree is a history (a tree) of the past moves played.
@@ -60,7 +61,8 @@ var MoveTree = function(parsedSgf) {
   // The moveHistory serves two purposes -- it allows travel backwards (i.e.,
   // up the tree), and it gives the current move, which is the last move in the
   // array.
-  this._moveHistory = ([]).push(this._parsedSgf);
+  this._moveHistory = []
+  this._moveHistory.push(this._parsedSgf);
 };
 
 MoveTree.prototype = {
@@ -68,12 +70,36 @@ MoveTree.prototype = {
     return this._moveHistory[this._moveHistory.length - 1];
   },
 
+  getCurrentProps: function() { 
+    return this.getCurrentMove()['data'];
+  },
+
+  // Return the value of a property, if it exists.
+  // Otherwise, return None
+  getCurrentProp: function(strProp) {
+    if (otre.sgf.allProps[strProp] === undefined) {
+      util.debugl("attempted to retrieve a property that is not part" 
+           + " of the SGF Spec: " + strProp);
+      return util.none;
+    }
+    var curProps = this.getCurrentProps();
+    if (curProps !== undefined && curProps[strProp] !== undefined) {
+      return curProps[strProp];
+    } else { 
+      util.debugl("no property: " + strProp + " exists for the current move");
+      return util.none; 
+    }
+  },
+
   //TODO
-  addMove: function() {},
+  addMove: function(color, point) {},
+
   //TODO
   deleteCurrentMove: function() {},
+
   //TODO
   moveDown: function(variationNum) {},
+
   //TODO
   moveUp: function() {}
 };
