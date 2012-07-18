@@ -18,4 +18,11 @@ otre.sgf.movetree_test = function() {
     equal(util.none, mt.getCurrentProp("B"), 
         "should return nothing for a non-existent prop");
   });
+
+  test("that sgf point conversion works", function() {
+    var pt = movetree.sgfCoordToPoint("ac");
+    equal(0, pt.x, "pt.x");
+    equal(2, pt.y, "pt.y");
+    equal("ac", movetree.pointToSgfCoord(pt), "pt to sgf coord");
+  });
 };

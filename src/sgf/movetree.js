@@ -47,11 +47,25 @@ otre.sgf.movetree = {
     return { tokens: {}, moves: [] };
   },
 
-   
+  // SGFs are indexed from the Upper Left:
+  //  _  _  _ 
+  // |aa ba ca ...
+  // |ab bb
+  // |.
+  // |.
+  // |.
+  sgfCoordToPoint: function(coord) {
+    return new util.Point(coord.charCodeAt(0) - 97, coord.charCodeAt(1) - 97);
+  },
+
+  pointToSgfCoord: function(coord) {
+    return String.fromCharCode(coord.x +  97) + 
+        String.fromCharCode(coord.y + 97)
+  }
 };
 
-// A MoveTree is a history (a tree) of the past moves played.
-// The movetree is (usually) a processed parsed SGF, but could 
+// A MoveTree is a history (a tree) of the past moves played.  The movetree is
+// (usually) a processed parsed SGF, but could be created organically.
 //
 // The tree itself is tree structure made out of MoveNodes.
 var MoveTree = function(parsedSgf) {
@@ -89,6 +103,10 @@ MoveTree.prototype = {
       util.debugl("no property: " + strProp + " exists for the current move");
       return util.none; 
     }
+  },
+
+  addProperty: function(strProp) { 
+    
   },
 
   //TODO

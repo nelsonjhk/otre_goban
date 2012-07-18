@@ -21,6 +21,11 @@ otre.rules.goban = {
 //
 // Thus, to get a particular "stone" you must do
 // stones[y][x]. Also, stones are 0-indexed.
+//
+// 0,0    : Upper Left
+// 0,19   : Lower Left
+// 19,0   : Upper Right
+// 19,19  : Lower Right
 var Goban = function(ints) {
   if (ints <= 0) throw "Intersections must be greater than 0";
   this.ints = ints;
