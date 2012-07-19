@@ -19,7 +19,8 @@ otre.sgf.parser = (function(){
         "Start": parse_Start,
         "TokenName": parse_TokenName,
         "Tokens": parse_Tokens,
-        "Variations": parse_Variations
+        "Variations": parse_Variations,
+        "WhiteSpace": parse_WhiteSpace
       };
       
       if (startRule !== undefined) {
@@ -196,15 +197,7 @@ otre.sgf.parser = (function(){
               }
             }
             if (result9 !== null) {
-              if (input.substr(pos, 1) === "\n") {
-                var result17 = "\n";
-                pos += 1;
-              } else {
-                var result17 = null;
-                if (reportMatchFailures) {
-                  matchFailed("\"\\n\"");
-                }
-              }
+              var result17 = parse_WhiteSpace();
               var result10 = result17 !== null ? result17 : '';
               if (result10 !== null) {
                 if (input.substr(pos, 1) === "(") {
@@ -229,15 +222,7 @@ otre.sgf.parser = (function(){
                       }
                     }
                     if (result13 !== null) {
-                      if (input.substr(pos, 1) === "\n") {
-                        var result16 = "\n";
-                        pos += 1;
-                      } else {
-                        var result16 = null;
-                        if (reportMatchFailures) {
-                          matchFailed("\"\\n\"");
-                        }
-                      }
+                      var result16 = parse_WhiteSpace();
                       var result14 = result16 !== null ? result16 : '';
                       if (result14 !== null) {
                         var result15 = parse_MoreVars();
@@ -280,7 +265,7 @@ otre.sgf.parser = (function(){
           pos = savedPos2;
         }
         var result6 = result5 !== null
-          ? (function(var1, var2, more) { return [var1, var2].concat(more); })(result5[1], result5[5], result5[8])
+          ? (function(var1, white, var2, white, more) { return [var1, var2].concat(more); })(result5[1], result5[3], result5[5], result5[7], result5[8])
           : null;
         if (result6 !== null) {
           var result4 = result6;
@@ -351,15 +336,7 @@ otre.sgf.parser = (function(){
               }
             }
             if (result9 !== null) {
-              if (input.substr(pos, 1) === "\n") {
-                var result12 = "\n";
-                pos += 1;
-              } else {
-                var result12 = null;
-                if (reportMatchFailures) {
-                  matchFailed("\"\\n\"");
-                }
-              }
+              var result12 = parse_WhiteSpace();
               var result10 = result12 !== null ? result12 : '';
               if (result10 !== null) {
                 var result11 = parse_MoreVars();
@@ -386,7 +363,7 @@ otre.sgf.parser = (function(){
           pos = savedPos2;
         }
         var result6 = result5 !== null
-          ? (function(move, more) { return [move].concat(more); })(result5[1], result5[4])
+          ? (function(move, white, more) { return [move].concat(more); })(result5[1], result5[3], result5[4])
           : null;
         if (result6 !== null) {
           var result4 = result6;
@@ -554,28 +531,12 @@ otre.sgf.parser = (function(){
                 }
               }
               if (result6 !== null) {
-                if (input.substr(pos, 1) === "\n") {
-                  var result12 = "\n";
-                  pos += 1;
-                } else {
-                  var result12 = null;
-                  if (reportMatchFailures) {
-                    matchFailed("\"\\n\"");
-                  }
-                }
+                var result12 = parse_WhiteSpace();
                 var result7 = result12 !== null ? result12 : '';
                 if (result7 !== null) {
                   var result8 = parse_MoreData();
                   if (result8 !== null) {
-                    if (input.substr(pos, 1) === "\n") {
-                      var result11 = "\n";
-                      pos += 1;
-                    } else {
-                      var result11 = null;
-                      if (reportMatchFailures) {
-                        matchFailed("\"\\n\"");
-                      }
-                    }
+                    var result11 = parse_WhiteSpace();
                     var result9 = result11 !== null ? result11 : '';
                     if (result9 !== null) {
                       var result10 = parse_MoreTokens();
@@ -614,10 +575,10 @@ otre.sgf.parser = (function(){
           pos = savedPos1;
         }
         var result2 = result1 !== null
-          ? (function(token, data, more, tokens) {
+          ? (function(token, data, white, more, white, tokens) {
             tokens[token] = [data].concat(more);
             return tokens;
-          })(result1[0], result1[2], result1[5], result1[7])
+          })(result1[0], result1[2], result1[4], result1[5], result1[6], result1[7])
           : null;
         if (result2 !== null) {
           var result0 = result2;
@@ -805,15 +766,7 @@ otre.sgf.parser = (function(){
               }
             }
             if (result9 !== null) {
-              if (input.substr(pos, 1) === "\n") {
-                var result12 = "\n";
-                pos += 1;
-              } else {
-                var result12 = null;
-                if (reportMatchFailures) {
-                  matchFailed("\"\\n\"");
-                }
-              }
+              var result12 = parse_WhiteSpace();
               var result10 = result12 !== null ? result12 : '';
               if (result10 !== null) {
                 var result11 = parse_MoreData();
@@ -840,7 +793,7 @@ otre.sgf.parser = (function(){
           pos = savedPos2;
         }
         var result6 = result5 !== null
-          ? (function(data, more) { return [data].concat(more); })(result5[1], result5[4])
+          ? (function(data, white, more) { return [data].concat(more); })(result5[1], result5[3], result5[4])
           : null;
         if (result6 !== null) {
           var result4 = result6;
@@ -955,6 +908,83 @@ otre.sgf.parser = (function(){
         } else {
           var result0 = null;
           pos = savedPos0;
+        }
+        
+        
+        
+        cache[cacheKey] = {
+          nextPos: pos,
+          result:  result0
+        };
+        return result0;
+      }
+      
+      function parse_WhiteSpace() {
+        var cacheKey = 'WhiteSpace@' + pos;
+        var cachedResult = cache[cacheKey];
+        if (cachedResult) {
+          pos = cachedResult.nextPos;
+          return cachedResult.result;
+        }
+        
+        
+        var result0 = [];
+        if (input.substr(pos, 1) === " ") {
+          var result3 = " ";
+          pos += 1;
+        } else {
+          var result3 = null;
+          if (reportMatchFailures) {
+            matchFailed("\" \"");
+          }
+        }
+        if (result3 !== null) {
+          var result1 = result3;
+        } else {
+          if (input.substr(pos, 1) === "\n") {
+            var result2 = "\n";
+            pos += 1;
+          } else {
+            var result2 = null;
+            if (reportMatchFailures) {
+              matchFailed("\"\\n\"");
+            }
+          }
+          if (result2 !== null) {
+            var result1 = result2;
+          } else {
+            var result1 = null;;
+          };
+        }
+        while (result1 !== null) {
+          result0.push(result1);
+          if (input.substr(pos, 1) === " ") {
+            var result3 = " ";
+            pos += 1;
+          } else {
+            var result3 = null;
+            if (reportMatchFailures) {
+              matchFailed("\" \"");
+            }
+          }
+          if (result3 !== null) {
+            var result1 = result3;
+          } else {
+            if (input.substr(pos, 1) === "\n") {
+              var result2 = "\n";
+              pos += 1;
+            } else {
+              var result2 = null;
+              if (reportMatchFailures) {
+                matchFailed("\"\\n\"");
+              }
+            }
+            if (result2 !== null) {
+              var result1 = result2;
+            } else {
+              var result1 = null;;
+            };
+          }
         }
         
         

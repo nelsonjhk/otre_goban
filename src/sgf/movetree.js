@@ -40,7 +40,10 @@ otre.sgf.movetree = {
 
   // Create a MoveTree from an SGF.
   getFromSgf: function(sgfString) {
-    return new MoveTree(otre.sgf.parser.parse($.trim(sgfString)));
+    return new MoveTree(
+        this._numberMoves(
+            otre.sgf.parser.parse($.trim(sgfString)),
+            0));
   },
 
   _createNewMove: function() {
@@ -48,7 +51,7 @@ otre.sgf.movetree = {
   },
 
   // SGFs are indexed from the Upper Left:
-  //  _  _  _ 
+  //  _  _  _
   // |aa ba ca ...
   // |ab bb
   // |.
@@ -59,8 +62,17 @@ otre.sgf.movetree = {
   },
 
   pointToSgfCoord: function(coord) {
-    return String.fromCharCode(coord.x +  97) + 
+    return String.fromCharCode(coord.x +  97) +
         String.fromCharCode(coord.y + 97)
+  },
+
+  _numberMoves: function(move, num) {
+    move['movenum'] = num;
+    for (var i = 0; i < move['moves'].length; i++) {
+      var next = move['moves'][i];
+      this._numberMoves(next, num + 1);
+    }
+    return move;
   }
 };
 
@@ -84,42 +96,68 @@ MoveTree.prototype = {
     return this._moveHistory[this._moveHistory.length - 1];
   },
 
-  getCurrentProps: function() { 
+  getAllNextMoves: function() {
+    return this.getCurrentMove()['moves'];
+  },
+
+  // Get a particular next move.
+  // num can be undefined, for convenience.
+  getNextMove: function(num) {
+    if (num === undefined) {
+      return this.getAllNextMoves()[0];
+    } else {
+      return this.getAllNextMoves()[num];
+    }
+  },
+
+  getCurrentMoveNum: function() {
+    return this.getCurrentMove()['movenum']
+  },
+
+  getAllCurrentProps: function() {
     return this.getCurrentMove()['data'];
   },
+
 
   // Return the value of a property, if it exists.
   // Otherwise, return None
   getCurrentProp: function(strProp) {
     if (otre.sgf.allProps[strProp] === undefined) {
-      util.debugl("attempted to retrieve a property that is not part" 
+      util.debugl("attempted to retrieve a property that is not part"
            + " of the SGF Spec: " + strProp);
       return util.none;
     }
-    var curProps = this.getCurrentProps();
+    var curProps = this.getAllCurrentProps();
     if (curProps !== undefined && curProps[strProp] !== undefined) {
       return curProps[strProp];
-    } else { 
+    } else {
       util.debugl("no property: " + strProp + " exists for the current move");
-      return util.none; 
+      return util.none;
     }
   },
 
-  addProperty: function(strProp) { 
-    
+  addProperty: function(prop, value) {},
+
+  // Move down only if there is an available variation
+  // variationNum can be undefined for convenicence.
+  moveDown: function(variationNum) {
+    var num = variationNum === undefined ? 0 : variationNum;
+    (this.getNextMove(num) !== undefined) &&
+        this._moveHistory.push(this.getNextMove(num));
+    return this.getCurrentMove();
+  },
+
+  moveUp: function() {
+    if (this._moveHistory.length > 1) {
+      this._moveHistory.pop(); 
+    }
   },
 
   //TODO
   addMove: function(color, point) {},
 
   //TODO
-  deleteCurrentMove: function() {},
-
-  //TODO
-  moveDown: function(variationNum) {},
-
-  //TODO
-  moveUp: function() {}
+  deleteCurrentMove: function() {}
 };
 
 })();
