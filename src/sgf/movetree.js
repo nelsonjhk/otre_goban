@@ -136,9 +136,37 @@ MoveTree.prototype = {
     }
   },
 
-  addProperty: function(prop, value) {},
+  hasProp: function(prop) {
+    return this.getCurrentProp(prop) !== util.none;
+  },
 
-  // Move down only if there is an available variation
+  // Delete the prop and return the value.
+  deleteProp: function(prop) {
+    if (this.hasProp(prop)) {
+      var value = this.getCurrentProp(prop);
+      delete this.getAllCurrentProps()[prop];
+      return value
+    }
+  },
+
+  // Add an SGF Property to the current move. Return the MoveTree, for
+  // convenience, so that you can chain addProp calls.
+  //
+  // Eventually, each sgf property should be matched to a datatype.  For now,
+  // the user is allowed to put arbitrary data into a property.
+  //
+  // Note that this does not overwrite an existing property - for that, the user
+  // has to delet the existing property.
+  addProp: function(prop, value) {
+    // Return false if the property already exists.
+    if (this.hasProp(prop)) return this; 
+    // Return if the property is not a real property.
+    if (otre.sgf.allProps[prop] === undefined) return this;
+    this.getAllCurrentProps()[prop] = value;
+    return this;
+  },
+
+  // Move down, but only if there is an available variation
   // variationNum can be undefined for convenicence.
   moveDown: function(variationNum) {
     var num = variationNum === undefined ? 0 : variationNum;
@@ -147,6 +175,7 @@ MoveTree.prototype = {
     return this.getCurrentMove();
   },
 
+  // Move up a move, but only if you are not in the intial (0th) move.
   moveUp: function() {
     if (this._moveHistory.length > 1) {
       this._moveHistory.pop(); 

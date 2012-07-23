@@ -13,9 +13,14 @@ otre.sgf.movetree_test = function() {
     var mt = movetree.getFromSgf(sgfs.veryeasy);
     equal(mt.getCurrentMoveNum(), 0, 'movenum');
     var prop = mt.getCurrentProp("FF");
+    ok(mt.hasProp("FF"), "should return true for an existing prop");
     equal(prop, "4", "should get an existing property");
+
+    ok(!mt.hasProp("ZZ"), "should return false for non-real prop");
     equal(mt.getCurrentProp("ZZ"), util.none,
-        "should return nothing for a fake prop");
+        "should return nothing for a non-real prop");
+
+    ok(!mt.hasProp("B"), "should return false for non-existent prop");
     equal(mt.getCurrentProp("B"), util.none,
         "should return nothing for a non-existent prop");
   });
@@ -44,10 +49,27 @@ otre.sgf.movetree_test = function() {
     equal(mt.getCurrentProp("B"), "ra", "stoneMove");
   });
 
-  test("that edge case of moving up: only one move left - works", function() {
+  test("that edge case of moving up: only one move left - works."
+      + "In other words, don't remove the last move", function() {
     var mt = movetree.getFromSgf(sgfs.easy);
     mt.moveUp();
     equal(mt.getCurrentMoveNum(), 0, 'move num');
     equal(mt.getAllNextMoves().length, 3, 'next moves');
+  });
+
+  test("Test that delete works", function() {
+    var mt = movetree.getFromSgf(sgfs.veryeasy);
+    equal(mt.getCurrentProp("AP"), "CGoban:3", "should get the AP prop");
+    equal(mt.deleteProp("AP"), "CGoban:3", "should delete the prop");
+    ok(!mt.hasProp("AP"), "Prop shouldn't exist anymore");
+  });
+
+  test("Test that adding properties works", function() {
+    var movt = movetree.getFromSgf(sgfs.veryeasy);
+    movt.addProp("C", "foo")
+        .addProp("C", "bap")
+        .addProp("EV", "tourny");
+    equal(movt.getCurrentProp("C"), "foo", "Should get the correct comment");
+    equal(movt.getCurrentProp("EV"), "tourny", "Chaining should work");
   });
 };
