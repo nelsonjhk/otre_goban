@@ -35,19 +35,24 @@ var enums = otre.enums;
 otre.sgf.movetree = {
   // Create an empty MoveTree
   getInstance: function() {
-    return new MoveTree(this._createNewMove());
+    return new MoveTree(this._createRootNode());
   },
 
   // Create a MoveTree from an SGF.
   getFromSgf: function(sgfString) {
+
+    // Before we give back the tree, we number the nodes, with both the
+    // variation number and move number.  Without these, there is no good way to
+    // uniquely identify a node, beyond the object reference.
     return new MoveTree(
         this._numberMoves(
-            otre.sgf.parser.parse($.trim(sgfString)),
-            0));
+            otre.sgf.parser.parse($.trim(sgfString)), 
+            0, /* moveNum */
+            0 /* varNum */));
   },
 
-  _createNewMove: function() {
-    return { tokens: {}, moves: [] };
+  _createRootNode: function() {
+    return { moveNum: 0, varNum: 0, data: {}, moves: [] };
   },
 
   // SGFs are indexed from the Upper Left:
@@ -66,11 +71,12 @@ otre.sgf.movetree = {
         String.fromCharCode(coord.y + 97)
   },
 
-  _numberMoves: function(move, num) {
-    move['movenum'] = num;
+  _numberMoves: function(move, moveNum, varNum) {
+    move['moveNum'] = moveNum;
+    move['varNum'] = varNum;
     for (var i = 0; i < move['moves'].length; i++) {
       var next = move['moves'][i];
-      this._numberMoves(next, num + 1);
+      this._numberMoves(next, moveNum + 1, i);
     }
     return move;
   }
@@ -100,6 +106,10 @@ MoveTree.prototype = {
     return this.getCurrentMove()['moves'];
   },
 
+  getNextMovesLength: function() {
+    return this.getAllNextMoves().length;
+  },
+
   // Get a particular next move.
   // num can be undefined, for convenience.
   getNextMove: function(num) {
@@ -111,13 +121,18 @@ MoveTree.prototype = {
   },
 
   getCurrentMoveNum: function() {
-    return this.getCurrentMove()['movenum']
+    return this.getCurrentMove()['moveNum'];
+  },
+
+  // Get the current variation number. This is not necessary, but extremely
+  // convenient for moving / deleting move nodes.
+  getCurrentVarNum: function() {
+    return this.getCurrentMove()['varNum'];
   },
 
   getAllCurrentProps: function() {
     return this.getCurrentMove()['data'];
   },
-
 
   // Return the value of a property, if it exists.
   // Otherwise, return None
@@ -182,8 +197,28 @@ MoveTree.prototype = {
     }
   },
 
-  //TODO
-  addMove: function(color, point) {},
+  // Add a 'move' to the current move and set the current move to that move.
+  // Recall that a move is an object that looks like:
+  //  {
+  //    moveNum : <num>,
+  //    varNum : <num>,
+  //    moves : [...],
+  //    data : { .... }
+  //  }
+  //
+  addNewMove: function() {
+    var nextMoveNum = this.getCurrentMoveNum() + 1;
+    var nextVarNum = this.getNextMovesLength();
+    this.getAllNextMoves().push(
+      {
+        moveNum : nextMoveNum,
+        varNum : nextVarNum,
+        moves : [],
+        data : {}
+      }
+    );
+    this.moveDown(this.getNextMovesLength() - 1);
+  },
 
   //TODO
   deleteCurrentMove: function() {}

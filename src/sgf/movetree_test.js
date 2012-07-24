@@ -35,16 +35,23 @@ otre.sgf.movetree_test = function() {
   test("that moving up / down works correctly", function() {
     var mt = movetree.getFromSgf(sgfs.easy);
     equal(mt.getCurrentMoveNum(), 0, 'move num');
+    equal(mt.getCurrentVarNum(), 0, 'var num');
     equal(mt.getAllNextMoves().length, 3, 'next moves');
+
     mt.moveDown();
     equal(mt.getCurrentMoveNum(), 1, 'move num');
+    equal(mt.getCurrentVarNum(), 0, 'var num');
     equal(mt.getAllNextMoves().length, 1, 'next moves');
     equal(mt.getCurrentProp("B"), "sa", "stoneMove");
+
     mt.moveUp();
     equal(mt.getCurrentMoveNum(), 0, 'move num');
+    equal(mt.getCurrentVarNum(), 0, 'var num');
     equal(mt.getAllNextMoves().length, 3, 'next moves');
+
     mt.moveDown(1);
     equal(mt.getCurrentMoveNum(), 1, 'move num');
+    equal(mt.getCurrentVarNum(), 1, 'var num');
     equal(mt.getAllNextMoves().length, 1, 'next moves');
     equal(mt.getCurrentProp("B"), "ra", "stoneMove");
   });
@@ -54,10 +61,11 @@ otre.sgf.movetree_test = function() {
     var mt = movetree.getFromSgf(sgfs.easy);
     mt.moveUp();
     equal(mt.getCurrentMoveNum(), 0, 'move num');
+    equal(mt.getCurrentVarNum(), 0, 'var num');
     equal(mt.getAllNextMoves().length, 3, 'next moves');
   });
 
-  test("Test that delete works", function() {
+  test("Test that deleting a property works", function() {
     var mt = movetree.getFromSgf(sgfs.veryeasy);
     equal(mt.getCurrentProp("AP"), "CGoban:3", "should get the AP prop");
     equal(mt.deleteProp("AP"), "CGoban:3", "should delete the prop");
@@ -72,4 +80,6 @@ otre.sgf.movetree_test = function() {
     equal(movt.getCurrentProp("C"), "foo", "Should get the correct comment");
     equal(movt.getCurrentProp("EV"), "tourny", "Chaining should work");
   });
+
+  // TODO: Test for adding moves
 };
