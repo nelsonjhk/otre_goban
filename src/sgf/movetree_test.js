@@ -82,4 +82,29 @@ otre.sgf.movetree_test = function() {
   });
 
   // TODO: Test for adding moves
+  test("Adding Nodes Works", function() {
+    var movt = movetree.getInstance();
+    movt.addProp("C", "0th")
+        .addProp("EV", "AOEU")
+        .addNewMove()
+        .addProp("C", "1.0")
+        .moveUp()
+        .addNewMove()
+        .addProp("C", "1.1")
+        .moveToRoot();
+    equal(movt.getCurrentProp("C"), "0th", "Should get the correct comment");
+    equal(movt.getCurrentMoveNum(), 0, "Should get the move num");
+    equal(movt.getCurrentVarNum(), 0, "Should get the var num");
+
+    movt.moveDown()
+    equal(movt.getCurrentProp("C"), "1.0", "Should get the correct comment");
+    equal(movt.getCurrentMoveNum(), 1, "Should get the move num");
+    equal(movt.getCurrentVarNum(), 0, "Should get the var num");
+
+    movt.moveUp()
+    movt.moveDown(1)
+    equal(movt.getCurrentProp("C"), "1.1", "Should get the correct comment");
+    equal(movt.getCurrentMoveNum(), 1, "Should get the move num");
+    equal(movt.getCurrentVarNum(), 1, "Should get the var num");
+  });
 };

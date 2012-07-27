@@ -187,7 +187,7 @@ MoveTree.prototype = {
     var num = variationNum === undefined ? 0 : variationNum;
     (this.getNextMove(num) !== undefined) &&
         this._moveHistory.push(this.getNextMove(num));
-    return this.getCurrentMove();
+    return this;
   },
 
   // Move up a move, but only if you are not in the intial (0th) move.
@@ -195,6 +195,13 @@ MoveTree.prototype = {
     if (this._moveHistory.length > 1) {
       this._moveHistory.pop(); 
     }
+    return this;
+  },
+
+  // Move to the root node
+  moveToRoot: function() {
+    this._moveHistory = this._moveHistory.slice(0,1);
+    return this;
   },
 
   // Add a 'move' to the current move and set the current move to that move.
@@ -205,6 +212,8 @@ MoveTree.prototype = {
   //    moves : [...],
   //    data : { .... }
   //  }
+  //
+  //  Return this for convenience.
   //
   addNewMove: function() {
     var nextMoveNum = this.getCurrentMoveNum() + 1;
@@ -218,10 +227,17 @@ MoveTree.prototype = {
       }
     );
     this.moveDown(this.getNextMovesLength() - 1);
+    return this;
   },
 
   //TODO
-  deleteCurrentMove: function() {}
+  deleteCurrentMove: function() {
+       
+  },
+
+  toSgf: function() {
+
+  }
 };
 
 })();
