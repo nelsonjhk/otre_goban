@@ -51,8 +51,13 @@ otre.sgf.movetree = {
             0 /* varNum */));
   },
 
+  getFromNode: function(node) {
+    return new MoveTree(node);
+  },
+
   _createRootNode: function() {
-    return { moveNum: 0, varNum: 0, data: {}, moves: [] };
+    var nodeId = this.createNodeId(0, 0);
+    return { nodeId: nodeId, data: {}, moves: [] };
   },
 
   // SGFs are indexed from the Upper Left:
@@ -71,14 +76,30 @@ otre.sgf.movetree = {
         String.fromCharCode(coord.y + 97)
   },
 
+  // Seach nodes with a Depth First Search. We rely on closure variables to
+  // capture the result of the recursion.
+  _searchMoveTreeDFS: function(moveTree, func) {
+    func(moveTree);
+    for (var i = 0; i < moveTree.getNextMovesLength(); i++) {
+      otre.sgf.movetree._searchNodesDFS(moveTree.moveDown(i), func);
+    }
+    moveTree.moveUp();
+  },
+
+  // This adds NodeIds to an incoming parsed SGF.
   _numberMoves: function(move, moveNum, varNum) {
-    move['moveNum'] = moveNum;
-    move['varNum'] = varNum;
-    for (var i = 0; i < move['moves'].length; i++) {
-      var next = move['moves'][i];
+    move.nodeId = this.createNodeId(moveNum, varNum);
+    for (var i = 0; i < move.moves.length; i++) {
+      var next = move.moves[i];
       this._numberMoves(next, moveNum + 1, i);
     }
     return move;
+  },
+
+  // Create a simple object to keep track of the move number and the
+  // variation number for a node in the moveTree.
+  createNodeId: function(moveNum, varNum) {
+    return { moveNum: moveNum, varNum: varNum };
   }
 };
 
@@ -87,23 +108,24 @@ otre.sgf.movetree = {
 //
 // The tree itself is tree structure made out of MoveNodes.
 var MoveTree = function(parsedSgf) {
-  // This could be called the 'rootMove'.
-  this._parsedSgf = parsedSgf;
-
   // The moveHistory serves two purposes -- it allows travel backwards (i.e.,
   // up the tree), and it gives the current move, which is the last move in the
   // array.
   this._moveHistory = []
-  this._moveHistory.push(this._parsedSgf);
+  this._moveHistory.push(parsedSgf);
 };
 
 MoveTree.prototype = {
+  getRoot: function() {
+    return this.moveHistory[0];
+  },
+
   getCurrentMove: function() {
     return this._moveHistory[this._moveHistory.length - 1];
   },
 
   getAllNextMoves: function() {
-    return this.getCurrentMove()['moves'];
+    return this.getCurrentMove().moves;
   },
 
   getNextMovesLength: function() {
@@ -121,17 +143,21 @@ MoveTree.prototype = {
   },
 
   getCurrentMoveNum: function() {
-    return this.getCurrentMove()['moveNum'];
+    return this.getCurrentMove().nodeId.moveNum;
   },
 
   // Get the current variation number. This is not necessary, but extremely
   // convenient for moving / deleting move nodes.
   getCurrentVarNum: function() {
-    return this.getCurrentMove()['varNum'];
+    return this.getCurrentMove().nodeId.varNum;
+  },
+
+  getCurrentNodeId: function() {
+    return this.getCurrentMove().nodeId;
   },
 
   getAllCurrentProps: function() {
-    return this.getCurrentMove()['data'];
+    return this.getCurrentMove().data;
   },
 
   // Return the value of a property, if it exists.
@@ -160,7 +186,7 @@ MoveTree.prototype = {
     if (this.hasProp(prop)) {
       var value = this.getCurrentProp(prop);
       delete this.getAllCurrentProps()[prop];
-      return value
+      return value;
     }
   },
 
@@ -173,10 +199,11 @@ MoveTree.prototype = {
   // Note that this does not overwrite an existing property - for that, the user
   // has to delet the existing property.
   addProp: function(prop, value) {
-    // Return false if the property already exists.
+    // Return if the property already exists, and do nothing.
     if (this.hasProp(prop)) return this; 
     // Return if the property is not a real property.
     if (otre.sgf.allProps[prop] === undefined) return this;
+    // Else add the property.
     this.getAllCurrentProps()[prop] = value;
     return this;
   },
@@ -216,12 +243,12 @@ MoveTree.prototype = {
   //  Return this for convenience.
   //
   addNewMove: function() {
-    var nextMoveNum = this.getCurrentMoveNum() + 1;
-    var nextVarNum = this.getNextMovesLength();
+    var nodeId = otre.sgf.movetree.createNodeId(
+        this.getCurrentMoveNum() + 1,
+        this.getNextMovesLength());
     this.getAllNextMoves().push(
       {
-        moveNum : nextMoveNum,
-        varNum : nextVarNum,
+        nodeId : nodeId,
         moves : [],
         data : {}
       }
@@ -230,13 +257,27 @@ MoveTree.prototype = {
     return this;
   },
 
-  //TODO
-  deleteCurrentMove: function() {
-       
+  recurseNodes: function(func) {
+    otre.sgf.movetree._searchMoveTreeDFS(this, func);
   },
 
-  toSgf: function() {
+  recurseFromStart: function(func) {
+    otre.sgf.movetree._searchNodesDFS(
+        otre.sgf.movetree.getFromNode(this.getRoot()), func);
+  },
 
+  //TODO
+  deleteCurrentMove: function() {},
+
+  toSgf: function() {},
+  
+  recurse: function(func) {
+    otre.sgf.movetree._searchNodesDFS(func, this.getCurrentMove());
+  },
+
+  // return an array of NodeIds
+  searchForProps: function(prop) {
+    var out = [];
   }
 };
 
