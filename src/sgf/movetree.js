@@ -120,12 +120,12 @@ MoveTree.prototype = {
     return this._nodeHistory[0];
   },
 
-  getCurrentNode: function() {
+  getNode: function() {
     return this._nodeHistory[this._nodeHistory.length - 1];
   },
 
   getAllNextNodes: function() {
-    return this.getCurrentNode().nodes;
+    return this.getNode().nodes;
   },
 
   getNumNextNodes: function() {
@@ -142,22 +142,22 @@ MoveTree.prototype = {
     }
   },
 
-  getCurrentNodeNum: function() {
-    return this.getCurrentNode().nodeId.nodeNum;
+  getNodeNum: function() {
+    return this.getNode().nodeId.nodeNum;
   },
 
   // Get the current variation number. This is not necessary, but extremely
   // convenient for moving / deleting move nodes.
-  getCurrentVarNum: function() {
-    return this.getCurrentNode().nodeId.varNum;
+  getVarNum: function() {
+    return this.getNode().nodeId.varNum;
   },
 
-  getCurrentNodeId: function() {
-    return this.getCurrentNode().nodeId;
+  getNodeId: function() {
+    return this.getNode().nodeId;
   },
 
   getAllProps: function() {
-    return this.getCurrentNode().props;
+    return this.getNode().props;
   },
 
   // Return the value of a property, if it exists.
@@ -251,7 +251,7 @@ MoveTree.prototype = {
   //
   addNewNode: function() {
     var nodeId = otre.sgf.movetree.createNodeId(
-        this.getCurrentNodeNum() + 1,
+        this.getNodeNum() + 1,
         this.getNumNextNodes());
     this.getAllNextNodes().push(
       {
@@ -276,13 +276,9 @@ MoveTree.prototype = {
         otre.sgf.movetree.getFromNode(this.getRoot()), func);
   },
 
+  // TODO (probably will involve the recursion)
   toSgf: function() {
   },
-  
-  // return an array of NodeIds
-  searchForProps: function(prop) {
-    var out = [];
-  }
 };
 
 })();

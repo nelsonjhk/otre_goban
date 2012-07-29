@@ -11,7 +11,7 @@ otre.sgf.movetree_test = function() {
 
   test("that property retrieval works", function() {
     var mt = movetree.getFromSgf(sgfs.veryeasy);
-    equal(mt.getCurrentNodeNum(), 0, 'movenum');
+    equal(mt.getNodeNum(), 0, 'movenum');
     var prop = mt.getProp("FF");
     ok(mt.hasProp("FF"), "should return true for an existing prop");
     equal(prop, "4", "should get an existing property");
@@ -34,24 +34,24 @@ otre.sgf.movetree_test = function() {
 
   test("that moving up / down works correctly", function() {
     var mt = movetree.getFromSgf(sgfs.easy);
-    equal(mt.getCurrentNodeNum(), 0, 'move num');
-    equal(mt.getCurrentVarNum(), 0, 'var num');
+    equal(mt.getNodeNum(), 0, 'move num');
+    equal(mt.getVarNum(), 0, 'var num');
     equal(mt.getAllNextNodes().length, 3, 'next nodes');
 
     mt.moveDown();
-    equal(mt.getCurrentNodeNum(), 1, 'move num');
-    equal(mt.getCurrentVarNum(), 0, 'var num');
+    equal(mt.getNodeNum(), 1, 'move num');
+    equal(mt.getVarNum(), 0, 'var num');
     equal(mt.getAllNextNodes().length, 1, 'next nodes');
     equal(mt.getProp("B"), "sa", "stoneMove");
 
     mt.moveUp();
-    equal(mt.getCurrentNodeNum(), 0, 'move num');
-    equal(mt.getCurrentVarNum(), 0, 'var num');
+    equal(mt.getNodeNum(), 0, 'move num');
+    equal(mt.getVarNum(), 0, 'var num');
     equal(mt.getAllNextNodes().length, 3, 'next nodes');
 
     mt.moveDown(1);
-    equal(mt.getCurrentNodeNum(), 1, 'move num');
-    equal(mt.getCurrentVarNum(), 1, 'var num');
+    equal(mt.getNodeNum(), 1, 'move num');
+    equal(mt.getVarNum(), 1, 'var num');
     equal(mt.getAllNextNodes().length, 1, 'next nodes');
     equal(mt.getProp("B"), "ra", "stoneMove");
   });
@@ -60,8 +60,8 @@ otre.sgf.movetree_test = function() {
       + "In other words, don't remove the last move", function() {
     var mt = movetree.getFromSgf(sgfs.easy);
     mt.moveUp();
-    equal(mt.getCurrentNodeNum(), 0, 'move num');
-    equal(mt.getCurrentVarNum(), 0, 'var num');
+    equal(mt.getNodeNum(), 0, 'move num');
+    equal(mt.getVarNum(), 0, 'var num');
     equal(mt.getAllNextNodes().length, 3, 'next nodes');
   });
 
@@ -93,19 +93,19 @@ otre.sgf.movetree_test = function() {
         .addProp("C", "1.1")
         .moveToRoot();
     equal(movt.getProp("C"), "0th", "Should get the correct comment");
-    equal(movt.getCurrentNodeNum(), 0, "Should get the move num");
-    equal(movt.getCurrentVarNum(), 0, "Should get the var num");
+    equal(movt.getNodeNum(), 0, "Should get the move num");
+    equal(movt.getVarNum(), 0, "Should get the var num");
 
     movt.moveDown()
     equal(movt.getProp("C"), "1.0", "Should get the correct comment");
-    equal(movt.getCurrentNodeNum(), 1, "Should get the move num");
-    equal(movt.getCurrentVarNum(), 0, "Should get the var num");
+    equal(movt.getNodeNum(), 1, "Should get the move num");
+    equal(movt.getVarNum(), 0, "Should get the var num");
 
     movt.moveUp()
     movt.moveDown(1)
     equal(movt.getProp("C"), "1.1", "Should get the correct comment");
-    equal(movt.getCurrentNodeNum(), 1, "Should get the move num");
-    equal(movt.getCurrentVarNum(), 1, "Should get the var num");
+    equal(movt.getNodeNum(), 1, "Should get the move num");
+    equal(movt.getVarNum(), 1, "Should get the var num");
   });
 
   test("Get Property as a Point", function() {
