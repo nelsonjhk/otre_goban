@@ -145,7 +145,7 @@ otre.sgf.parser = (function(){
         }
         var result2 = result1 !== null
           ? (function(tokens, pmoves) {
-            return { data: tokens, moves: pmoves };
+            return { props: tokens, nodes: pmoves };
           })(result1[1], result1[2])
           : null;
         if (result2 !== null) {
@@ -449,7 +449,7 @@ otre.sgf.parser = (function(){
         }
         var result6 = result5 !== null
           ? (function(tokens, variations) {
-                    return { data: tokens, moves: variations };
+                    return { props: tokens, nodes: variations };
                   })(result5[1], result5[2])
           : null;
         if (result6 !== null) {
@@ -575,8 +575,8 @@ otre.sgf.parser = (function(){
           pos = savedPos1;
         }
         var result2 = result1 !== null
-          ? (function(token, data, white, more, white, tokens) {
-            tokens[token] = [data].concat(more);
+          ? (function(token, props, white, more, white, tokens) {
+            tokens[token] = [props].concat(more);
             return tokens;
           })(result1[0], result1[2], result1[4], result1[5], result1[6], result1[7])
           : null;
@@ -713,8 +713,8 @@ otre.sgf.parser = (function(){
           }
         }
         var result2 = result1 !== null
-          ? (function(data) { 
-            return data.join(""); 
+          ? (function(props) { 
+            return props.join(""); 
           })(result1)
           : null;
         if (result2 !== null) {
@@ -793,7 +793,7 @@ otre.sgf.parser = (function(){
           pos = savedPos2;
         }
         var result6 = result5 !== null
-          ? (function(data, white, more) { return [data].concat(more); })(result5[1], result5[3], result5[4])
+          ? (function(props, white, more) { return [props].concat(more); })(result5[1], result5[3], result5[4])
           : null;
         if (result6 !== null) {
           var result4 = result6;

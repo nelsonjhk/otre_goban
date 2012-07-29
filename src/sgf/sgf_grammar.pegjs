@@ -2,7 +2,7 @@
  * Peg grammar for SGF files
  */
 Start = '(;' tokens:Tokens pmoves:Variations ')' {
-  return { data: tokens, moves: pmoves };
+  return { props: tokens, nodes: pmoves };
 }
 
 Variations =  '(' var1:Moves ')' white:WhiteSpace? '(' var2:Moves ')' white:WhiteSpace? more:MoreVars { return [var1, var2].concat(more); }
@@ -12,23 +12,23 @@ MoreVars = '(' move:Moves ')' white:WhiteSpace? more:MoreVars { return [move].co
     / '' { return []; }
 
 Moves = ';' tokens:Tokens variations:Variations {
-          return { data: tokens, moves: variations };
+          return { props: tokens, nodes: variations };
         }
     / '' { return undefined; }
 
-Tokens = token: TokenName '[' data: Data ']' white:WhiteSpace? more:MoreData white:WhiteSpace? tokens:MoreTokens {
-  tokens[token] = [data].concat(more);
+Tokens = token: TokenName '[' props: Data ']' white:WhiteSpace? more:MoreData white:WhiteSpace? tokens:MoreTokens {
+  tokens[token] = [props].concat(more);
   return tokens;
 }
 
 MoreTokens = Tokens
     / '' { return {}; }
 
-Data = data:(( '\\]' / [^\]])*) { 
-  return data.join(""); 
+Data = props:(( '\\]' / [^\]])*) { 
+  return props.join(""); 
 }
 
-MoreData = '[' data: Data ']' white:WhiteSpace? more: MoreData { return [data].concat(more); }
+MoreData = '[' props: Data ']' white:WhiteSpace? more: MoreData { return [props].concat(more); }
     / '' { return []; }
 
 TokenName = name:([a-zA-Z] [a-zA-Z] / [a-zA-Z]) {

@@ -11,17 +11,17 @@ otre.sgf.movetree_test = function() {
 
   test("that property retrieval works", function() {
     var mt = movetree.getFromSgf(sgfs.veryeasy);
-    equal(mt.getCurrentMoveNum(), 0, 'movenum');
-    var prop = mt.getCurrentProp("FF");
+    equal(mt.getCurrentNodeNum(), 0, 'movenum');
+    var prop = mt.getProp("FF");
     ok(mt.hasProp("FF"), "should return true for an existing prop");
     equal(prop, "4", "should get an existing property");
 
     ok(!mt.hasProp("ZZ"), "should return false for non-real prop");
-    equal(mt.getCurrentProp("ZZ"), util.none,
+    equal(mt.getProp("ZZ"), util.none,
         "should return nothing for a non-real prop");
 
     ok(!mt.hasProp("B"), "should return false for non-existent prop");
-    equal(mt.getCurrentProp("B"), util.none,
+    equal(mt.getProp("B"), util.none,
         "should return nothing for a non-existent prop");
   });
 
@@ -34,40 +34,40 @@ otre.sgf.movetree_test = function() {
 
   test("that moving up / down works correctly", function() {
     var mt = movetree.getFromSgf(sgfs.easy);
-    equal(mt.getCurrentMoveNum(), 0, 'move num');
+    equal(mt.getCurrentNodeNum(), 0, 'move num');
     equal(mt.getCurrentVarNum(), 0, 'var num');
-    equal(mt.getAllNextMoves().length, 3, 'next moves');
+    equal(mt.getAllNextNodes().length, 3, 'next nodes');
 
     mt.moveDown();
-    equal(mt.getCurrentMoveNum(), 1, 'move num');
+    equal(mt.getCurrentNodeNum(), 1, 'move num');
     equal(mt.getCurrentVarNum(), 0, 'var num');
-    equal(mt.getAllNextMoves().length, 1, 'next moves');
-    equal(mt.getCurrentProp("B"), "sa", "stoneMove");
+    equal(mt.getAllNextNodes().length, 1, 'next nodes');
+    equal(mt.getProp("B"), "sa", "stoneMove");
 
     mt.moveUp();
-    equal(mt.getCurrentMoveNum(), 0, 'move num');
+    equal(mt.getCurrentNodeNum(), 0, 'move num');
     equal(mt.getCurrentVarNum(), 0, 'var num');
-    equal(mt.getAllNextMoves().length, 3, 'next moves');
+    equal(mt.getAllNextNodes().length, 3, 'next nodes');
 
     mt.moveDown(1);
-    equal(mt.getCurrentMoveNum(), 1, 'move num');
+    equal(mt.getCurrentNodeNum(), 1, 'move num');
     equal(mt.getCurrentVarNum(), 1, 'var num');
-    equal(mt.getAllNextMoves().length, 1, 'next moves');
-    equal(mt.getCurrentProp("B"), "ra", "stoneMove");
+    equal(mt.getAllNextNodes().length, 1, 'next nodes');
+    equal(mt.getProp("B"), "ra", "stoneMove");
   });
 
   test("that edge case of moving up: only one move left - works."
       + "In other words, don't remove the last move", function() {
     var mt = movetree.getFromSgf(sgfs.easy);
     mt.moveUp();
-    equal(mt.getCurrentMoveNum(), 0, 'move num');
+    equal(mt.getCurrentNodeNum(), 0, 'move num');
     equal(mt.getCurrentVarNum(), 0, 'var num');
-    equal(mt.getAllNextMoves().length, 3, 'next moves');
+    equal(mt.getAllNextNodes().length, 3, 'next nodes');
   });
 
   test("Test that deleting a property works", function() {
     var mt = movetree.getFromSgf(sgfs.veryeasy);
-    equal(mt.getCurrentProp("AP"), "CGoban:3", "should get the AP prop");
+    equal(mt.getProp("AP"), "CGoban:3", "should get the AP prop");
     equal(mt.deleteProp("AP"), "CGoban:3", "should delete the prop");
     ok(!mt.hasProp("AP"), "Prop shouldn't exist anymore");
   });
@@ -77,34 +77,74 @@ otre.sgf.movetree_test = function() {
     movt.addProp("C", "foo")
         .addProp("C", "bap")
         .addProp("EV", "tourny");
-    equal(movt.getCurrentProp("C"), "foo", "Should get the correct comment");
-    equal(movt.getCurrentProp("EV"), "tourny", "Chaining should work");
+    equal(movt.getProp("C"), "foo", "Should get the correct comment");
+    equal(movt.getProp("EV"), "tourny", "Chaining should work");
   });
 
-  // TODO: Test for adding moves
+  // TODO: Test for adding nodes
   test("Adding Nodes Works", function() {
     var movt = movetree.getInstance();
     movt.addProp("C", "0th")
         .addProp("EV", "AOEU")
-        .addNewMove()
+        .addNewNode()
         .addProp("C", "1.0")
         .moveUp()
-        .addNewMove()
+        .addNewNode()
         .addProp("C", "1.1")
         .moveToRoot();
-    equal(movt.getCurrentProp("C"), "0th", "Should get the correct comment");
-    equal(movt.getCurrentMoveNum(), 0, "Should get the move num");
+    equal(movt.getProp("C"), "0th", "Should get the correct comment");
+    equal(movt.getCurrentNodeNum(), 0, "Should get the move num");
     equal(movt.getCurrentVarNum(), 0, "Should get the var num");
 
     movt.moveDown()
-    equal(movt.getCurrentProp("C"), "1.0", "Should get the correct comment");
-    equal(movt.getCurrentMoveNum(), 1, "Should get the move num");
+    equal(movt.getProp("C"), "1.0", "Should get the correct comment");
+    equal(movt.getCurrentNodeNum(), 1, "Should get the move num");
     equal(movt.getCurrentVarNum(), 0, "Should get the var num");
 
     movt.moveUp()
     movt.moveDown(1)
-    equal(movt.getCurrentProp("C"), "1.1", "Should get the correct comment");
-    equal(movt.getCurrentMoveNum(), 1, "Should get the move num");
+    equal(movt.getProp("C"), "1.1", "Should get the correct comment");
+    equal(movt.getCurrentNodeNum(), 1, "Should get the move num");
     equal(movt.getCurrentVarNum(), 1, "Should get the var num");
+  });
+
+  test("Get Property as a Point", function() {
+    var movt = movetree.getInstance();
+    movt.addProp("C", "0th")
+        .addProp("EV", "AOEU")
+        .addNewNode()
+        .addProp("B", "pb");
+    equal(15, movt.getPropPoint("B").x, 
+        "Should get and covert the x coord correctly");
+    equal(1, movt.getPropPoint("B").y,
+        "Should get and covert the y coord correctly");
+  });
+
+  test("Recursing through the nodes works", function() {
+    var movt = movetree.getInstance();
+    var conv = movetree.sgfCoordToPoint; 
+    movt.addProp("C", "0th").addProp("EV", "AOEU")
+        .addNewNode().addProp("B", "pb")
+        .addNewNode().addProp("W", "nc")
+        .addNewNode().addProp("B", "cc")
+        .moveToRoot()
+        .addNewNode().addProp("B", "dd");
+    var expected = [
+        'b_' + conv('pb'),
+        'w_' + conv('nc'),
+        'b_' + conv('cc'),
+        'b_' + conv('dd')];
+    var output = [];
+    movt.recurseFromRoot(function(mt) {
+      var buff = '';
+      if (mt.hasProp('B')) {
+        buff = 'b_' + mt.getPropPoint('B');
+      } else if (mt.hasProp('W')) {
+        buff = 'w_' + mt.getPropPoint('W');
+      }
+      if (buff !== '') output.push(buff);
+    });
+    equal(output.toString(), expected.toString(),
+        'simple DFS recursing should work');
   });
 };
