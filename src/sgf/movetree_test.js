@@ -25,6 +25,13 @@ otre.sgf.movetree_test = function() {
         "should return nothing for a non-existent prop");
   });
 
+  test("Test that property retrieval for multiple props works", function() {
+    var mt = movetree.getFromSgf(sgfs.easy);
+    equal(mt.getProp("AB")[1], "qa", "Should get the second property");
+    equal(mt.getProp("AW").toString(), ["pa", "pb", "sb", "pc", "qc", "sc", "qd",
+        "rd", "sd"].toString(), "should get a list of values");
+  });
+
   test("that sgf point conversion works", function() {
     var pt = movetree.sgfCoordToPoint("ac");
     equal(pt.x, 0, "pt.x");
@@ -114,9 +121,9 @@ otre.sgf.movetree_test = function() {
         .addProp("EV", "AOEU")
         .addNewNode()
         .addProp("B", "pb");
-    equal(15, movt.getPropPoint("B").x, 
+    equal(movt.getPropPoint("B").x, 15,
         "Should get and covert the x coord correctly");
-    equal(1, movt.getPropPoint("B").y,
+    equal(movt.getPropPoint("B").y, 1,
         "Should get and covert the y coord correctly");
   });
 

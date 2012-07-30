@@ -278,6 +278,9 @@ MoveTree.prototype = {
 
   // TODO (probably will involve the recursion)
   toSgf: function() {
+    var out = "";
+    for (var propKey in this.getAllProps()) {
+    }
   },
 };
 
