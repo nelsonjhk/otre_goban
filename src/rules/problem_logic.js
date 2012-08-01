@@ -6,22 +6,30 @@ var enums = otre.enums;
 (function() {
 otre.rules.problem_logic = {
   getInstance: function() {
-    return new ProblemLogic();
+    return new ProblemLogic(
+       
+    );
   }
 }
 
 // The Logic pieces are the connection pieces between the display and and the
-// rules. 
+// rules.  Specifically, the ProblemLogic contains the logic involved with doing
+// problems.
 //
-// The ProblemLogic contains the problem logic
-var ProblemLogic = function() {
-
+// Structurally, it looks like:
+//
+// ProblemLogic: 
+//    - Goban
+//    - MoveTree
+//
+// However, the MoveTree can be initialed / renitialized later. 
+var ProblemLogic = function(goban, sgf) {
+  this.goban = goban;
 };
 
 ProblemLogic.prototype = {
   initializeFromSgf: function(sgfString) {},
   addStone: function(point, color) {},
-  
 };
 
 })();

@@ -44,11 +44,11 @@ otre.rules.goban_test = function() {
     test_goban.addStone(util.point(2, 2), BLACK);
     test_goban.addStone(util.point(1, 2), WHITE);
     var result = test_goban.addStone(util.point(1, 3), BLACK);
-    equal(result.captures.length, 1, "list must be only 1 long");
+
+    equal(result.captures.length, 1, "captures array must be only 1 long");
     ok(result.successful, "must be be successful");
     equal(result.captures[0].toString(), otre.util.point(1,2).toString(),
         "must have captured the white stone");
   });
 };
 })();
-
