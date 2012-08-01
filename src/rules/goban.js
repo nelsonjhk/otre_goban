@@ -80,14 +80,19 @@ Goban.prototype = {
     this.stones[point.y][point.x] = color;
   },
 
-  // returns an array where:
-  // The first element determines whether or not the stone was placed. (1/0)
-  // The the rest are all the captured stones of the opposite color (since there are
-  // no self captures).  Note that the points are otre.util.Points
-  // Examples:
-  // [ 1, (1,2), (3,4) ... ]
-  // [ 1 ]
-  // [ 0 ]
+  // addStone: Add a stone to the GoBoard (0-indexed).  Requires the
+  // intersection (a point) where the stone is to be placed, and the color of
+  // the stone to be placed.
+  //
+  // addStane always returns a StoneResult object.
+  //
+  // A diagram of a StoneResult:
+  // {
+  //    successful: true or false   // Was placing a stone successful?
+  //    captures : [ ... points ... ]  // the intersections of stones captured
+  //        by placing a stone at the intersection (pt).
+  // }
+  //
   addStone: function(pt, color) {
     if (!util.colors.isLegalColor(color)) throw "Unknown color: " + color;
 
