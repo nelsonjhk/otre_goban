@@ -19,4 +19,5 @@ otre.util_test = function() {
 
   test("outbounds", function() {
     ok(util.outBounds(2, 19), "2 is within bounds");
-  };
+  });
+};
