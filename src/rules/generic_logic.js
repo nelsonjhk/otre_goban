@@ -28,6 +28,9 @@ GenericLogic.prototype = {
     // TODO
     return this;
   },
+
+  addStone: function(pt, color) {
+  }
 };
 
 })();

@@ -96,22 +96,6 @@ otre.sgf.movetree = {
     return move;
   },
 
-  // For one move, make sure that each property maps a string to an array
-  // (rather than string). This is non-recursive.
-  //
-  // Also, this is kinda a hack.  Really, this should be fixed in the grammar,
-  // but I can't figure out why this isn't like this already.
-  //
-  // TODO(jhoak): remove this function;
-  _normalizeProps: function(move) {
-    for (var property in move.props) {
-      var value = move.props[property];
-      if (util.typeOf(value) === 'string') {
-        move.props[property] === [].push(value);
-      }
-    }
-  },
-
   // Create a simple object to keep track of the move number and the
   // variation number for a node in the moveTree.
   createNodeId: function(nodeNum, varNum) {
@@ -127,7 +111,7 @@ var MoveTree = function(parsedSgf) {
   // The moveHistory serves two purposes -- it allows travel backwards (i.e.,
   // up the tree), and it gives the current move, which is the last move in the
   // array.
-  this._nodeHistory = []
+  this._nodeHistory = [];
   this._nodeHistory.push(parsedSgf);
 };
 
