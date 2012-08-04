@@ -10,7 +10,7 @@ otre.rules.problem_logic = {
        
     );
   }
-}
+};
 
 // The Logic pieces are the connection pieces between the display and and the
 // rules.  Specifically, the ProblemLogic contains the logic involved with doing
@@ -23,8 +23,7 @@ otre.rules.problem_logic = {
 //    - MoveTree
 //
 // However, the MoveTree can be initialed / renitialized later. 
-var ProblemLogic = function(goban, sgf) {
-  this.goban = goban;
+var ProblemLogic = function(intersections, sgf) {
 };
 
 ProblemLogic.prototype = {

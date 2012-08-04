@@ -10,6 +10,7 @@ otre.enums = {
     GAME: "game"
   },
 
+  // Also sometimes referred to as colors. See util.colors;
   states: {
     BLACK: "_bstate",
     WHITE: "_wstate",

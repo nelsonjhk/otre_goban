@@ -16,11 +16,8 @@
 
 <!-- Src and Test files -->
 <script type="text/javascript" src="util/util.js"></script>
+<script type="text/javascript" src="util/point.js"></script>
 <script type="text/javascript" src="util/util_test.js"></script>
-
-<script type="text/javascript" src="rules/rules.js"></script>
-<script type="text/javascript" src="rules/goban.js"></script>
-<script type="text/javascript" src="rules/goban_test.js"></script>
 
 <script type="text/javascript" src="sgf/sgf.js"></script>
 <script type="text/javascript" src="sgf/props.js"></script>
@@ -28,13 +25,19 @@
 <script type="text/javascript" src="sgf/movetree.js"></script>
 <script type="text/javascript" src="sgf/movetree_test.js"></script>
 
+<script type="text/javascript" src="rules/rules.js"></script>
+<script type="text/javascript" src="rules/goban.js"></script>
+<script type="text/javascript" src="rules/goban_test.js"></script>
+<script type="text/javascript" src="rules/generic_logic.js"></script>
+<script type="text/javascript" src="rules/generic_logic_test.js"></script>
 
 <script>
 $(document).ready(function() {
   // otre.debugOn = true;
   otre.util_test();
-  otre.rules.goban_test();
   otre.sgf.movetree_test();
+  otre.rules.goban_test();
+  otre.rules.generic_logic_test();
 });
 </script>
 

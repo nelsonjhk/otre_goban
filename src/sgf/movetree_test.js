@@ -12,16 +12,16 @@ otre.sgf.movetree_test = function() {
   test("that property retrieval works", function() {
     var mt = movetree.getFromSgf(sgfs.veryeasy);
     equal(mt.getNodeNum(), 0, 'movenum');
-    var prop = mt.getProp("FF");
+    var prop = mt.getFirstProp("FF");
     ok(mt.hasProp("FF"), "should return true for an existing prop");
-    equal(prop, "4", "should get an existing property");
+    ok(prop === "4", "should get an existing property");
 
     ok(!mt.hasProp("ZZ"), "should return false for non-real prop");
-    equal(mt.getProp("ZZ"), util.none,
+    ok(mt.getProp("ZZ") === util.none,
         "should return nothing for a non-real prop");
 
     ok(!mt.hasProp("B"), "should return false for non-existent prop");
-    equal(mt.getProp("B"), util.none,
+    ok(mt.getProp("B") === util.none,
         "should return nothing for a non-existent prop");
   });
 

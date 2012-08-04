@@ -68,7 +68,7 @@ otre.sgf.movetree = {
   // |.
   // |.
   sgfCoordToPoint: function(coord) {
-    return new util.Point(coord.charCodeAt(0) - 97, coord.charCodeAt(1) - 97);
+    return new util.point(coord.charCodeAt(0) - 97, coord.charCodeAt(1) - 97);
   },
 
   pointToSgfCoord: function(coord) {
@@ -86,7 +86,7 @@ otre.sgf.movetree = {
     moveTree.moveUp();
   },
 
-  // This adds NodeIds to an incoming parsed SGF.
+  // This adds NodeIds to an incoming parsed SGF, recursively.
   _numberMoves: function(move, nodeNum, varNum) {
     move.nodeId = this.createNodeId(nodeNum, varNum);
     for (var i = 0; i < move.nodes.length; i++) {
@@ -94,6 +94,22 @@ otre.sgf.movetree = {
       this._numberMoves(next, nodeNum + 1, i);
     }
     return move;
+  },
+
+  // For one move, make sure that each property maps a string to an array
+  // (rather than string). This is non-recursive.
+  //
+  // Also, this is kinda a hack.  Really, this should be fixed in the grammar,
+  // but I can't figure out why this isn't like this already.
+  //
+  // TODO(jhoak): remove this function;
+  _normalizeProps: function(move) {
+    for (var property in move.props) {
+      var value = move.props[property];
+      if (util.typeOf(value) === 'string') {
+        move.props[property] === [].push(value);
+      }
+    }
   },
 
   // Create a simple object to keep track of the move number and the
@@ -160,7 +176,8 @@ MoveTree.prototype = {
     return this.getNode().props;
   },
 
-  // Return the value of a property, if it exists.
+  // Return the value of a property, if it exists.  Note that this always
+  // returns an array if it does exist.
   // Otherwise, return None
   getProp: function(strProp) {
     if (otre.sgf.allProps[strProp] === undefined) {
@@ -177,6 +194,18 @@ MoveTree.prototype = {
     }
   },
 
+  // Since the getProp always returns an array, it's sometimes useful to return
+  // the first property in the list.  Like getProp, if a property or value can't
+  // be found, util.none is returned.
+  getFirstProp: function(strProp) {
+    var value = this.getProp(strProp);
+    if (value !== util.none && value.length >= 1) {
+      return value[0]; 
+    } else {
+      return util.none;
+    }
+  },
+
   getPropPoint: function(strProp) {
     var out = this.getProp(strProp);
     if (out !== util.none) {
@@ -184,6 +213,24 @@ MoveTree.prototype = {
     }
   },
 
+  // Get all the placements for a color (BLACK or WHITE).  Return as an array.
+  getPlacementsAsPoints: function(color) {
+    var prop = "";
+    if (color === enums.states.BLACK) {
+      prop = otre.sgf.allProps.AB;
+    } else if (color === enums.states.WHITE) {
+      prop = otre.sgf.allProps.AW;
+    }
+    
+    if (prop === "" || !this.hasProp(prop)) {
+      return [];
+    }
+
+    return this.getProp(prop);
+  },
+
+  // hasProp: Return true if the current move has the property "prop".  Return
+  // false otherwise.
   hasProp: function(prop) {
     return this.getProp(prop) !== util.none;
   },

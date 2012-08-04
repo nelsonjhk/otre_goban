@@ -1,4 +1,3 @@
-(function() {
 otre.rules.goban_test = function() {
   var rules = otre.rules;
   var util = otre.util
@@ -51,4 +50,3 @@ otre.rules.goban_test = function() {
         "must have captured the white stone");
   });
 };
-})();
