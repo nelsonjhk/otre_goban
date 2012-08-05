@@ -1,11 +1,8 @@
-(function() {
-
+(function(){
 var util = otre.util;
 var log = otre.logger;
 var enums = otre.enums;
 
-// <otre_lib>
-(function(){
 otre.rules.goban = {
   getInstance: function(intersections) {
     var ints = intersections || 19;
@@ -246,6 +243,4 @@ var StoneResult = function(success, captures) {
   }
 };
 
-})();
-// </otre_lib>
 })();

@@ -2,7 +2,6 @@
 // Point data structure
 
 (function() {
-
 // Might consider being smarter and caching points.
 otre.util.point = function(x,y) {
   return new OtrePoint(x,y);

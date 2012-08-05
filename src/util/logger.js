@@ -1,7 +1,4 @@
 (function() {
-
-// <otre_lib>
-
 otre.logger = function(logDiv, numMsgs) {
   return new otre.Log(logDiv, numMsgs);
 };
@@ -44,6 +41,4 @@ otre.Log.prototype.printArr = function(arr) {
   }
   this.println("----");
 };
-
-// <otre_lib>
 })();

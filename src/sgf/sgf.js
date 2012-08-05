@@ -1,4 +1,3 @@
-// <otre_lib>
 /*
  * The SGF library contains functions for dealing with SGFs.
  *
@@ -8,4 +7,3 @@
  *
  */
 otre.sgf = {};
-// </otre_lib>

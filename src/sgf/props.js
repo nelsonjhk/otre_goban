@@ -1,7 +1,3 @@
-(function() {
-
-// <otre_lib>
-
 // The allProps object is used to check to make sure that a given property is
 // actually a real property
 otre.sgf.allProps = {
@@ -14,7 +10,3 @@ PL: 1, PM: 1, PW: 1, RE: 1, RG: 1, RO: 1, RU: 1, SC: 1, SE: 1, SE: 1, SI: 1,
 SL: 1, SO: 1, SQ: 1, ST: 1, SU: 1, SZ: 1, TB: 1, TC: 1, TE: 1, TM: 1, TR: 1,
 TW: 1, UC: 1, US: 1, V: 1, VW: 1, W: 1, WL: 1, WR: 1, WS: 1, WT: 1
 };
-var sgfProps = sgfProps;
-
-// </otre_lib>
-})();

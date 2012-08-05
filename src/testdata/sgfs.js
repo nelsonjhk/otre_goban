@@ -1,4 +1,4 @@
-// Note, this is not included in the compiled JS file.
+// This is not included in the compiled otre client file.
 if (testdata === undefined) var testdata = {};
 
 testdata.sgfs = {
@@ -25,4 +25,3 @@ testdata.sgfs = {
     ")" +
     "(;B[qb];W[ra]C[White lives]))"
 };
-

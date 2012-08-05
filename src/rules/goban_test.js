@@ -10,21 +10,21 @@ otre.rules.goban_test = function() {
   test("Successful addStone", function() {
     var test_goban = rules.goban.getInstance();
     var result = test_goban.addStone(util.point(1, 1), BLACK);
-    equal(result.captures.length, 0, "list must be only 1 long");
+    deepEqual(result.captures.length, 0, "list must be only 1 long");
     ok(result.successful, "must be successful");
   });
 
   test("Fail: Out of bounds: <0", function() {
     var test_goban = rules.goban.getInstance();
     var result = test_goban.addStone(util.point(-1, 1), BLACK);
-    equal(result.captures.length, 0, "list must be only 1 long");
+    deepEqual(result.captures.length, 0, "list must be only 1 long");
     ok(!result.successful, "must be not be successful");
   });
 
   test("Fail: Out of bounds: >=19", function() {
     var test_goban = rules.goban.getInstance();
     var result = test_goban.addStone(util.point(2, 19), BLACK);
-    equal(result.captures.length, 0, "list must be only 1 long");
+    deepEqual(result.captures.length, 0, "list must be only 1 long");
     ok(!result.successful, "must be not be successful");
   });
 
@@ -32,7 +32,7 @@ otre.rules.goban_test = function() {
     var test_goban = rules.goban.getInstance();
     test_goban.addStone(util.point(1, 1), BLACK);
     var result = test_goban.addStone(util.point(1, 1), BLACK);
-    equal(result.captures.length, 0, "list must be only 1 long");
+    deepEqual(result.captures.length, 0, "list must be only 1 long");
     ok(!result.successful, "must be not be successful");
   });
 
@@ -44,9 +44,9 @@ otre.rules.goban_test = function() {
     test_goban.addStone(util.point(1, 2), WHITE);
     var result = test_goban.addStone(util.point(1, 3), BLACK);
 
-    equal(result.captures.length, 1, "captures array must be only 1 long");
+    deepEqual(result.captures.length, 1, "captures array must be only 1 long");
     ok(result.successful, "must be be successful");
-    equal(result.captures[0].toString(), otre.util.point(1,2).toString(),
+    deepEqual(result.captures[0].toString(), otre.util.point(1,2).toString(),
         "must have captured the white stone");
   });
 };

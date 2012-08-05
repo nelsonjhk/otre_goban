@@ -1,9 +1,6 @@
 (function() {
 var util = otre.util;
 var enums = otre.enums;
-
-// <otre_lib>
-(function() {
 /*
  * When an SGF is parsed by the parser, it is transformed into the following:
  *
@@ -311,11 +308,8 @@ MoveTree.prototype = {
   toSgf: function() {
     var out = "";
     for (var propKey in this.getAllProps()) {
+      //TODO
     }
   },
 };
-
-})();
-// </otre_lib>
-
 })();

@@ -2,6 +2,15 @@
 var enums = otre.enums;
 
 // <otre_lib>
+// A utility method -- for prototypal inheritence.
+if (typeof Object.beget !== 'function') {
+  Object.beget = function (o) {
+    var F = function () {};
+    F.prototype = o;
+    return new F();
+  };
+}
+
 otre.util = {
   logz: function(msg) {
     var modmsg = msg;
@@ -46,39 +55,6 @@ otre.util = {
 };
 var util = otre.util;
 
-otre.util.colors = {
-  isLegalColor: function(color) {
-    return color === enums.states.BLACK ||
-        color === enums.states.WHITE ||
-        color === enums.states.EMPTY;
-  },
-
-  oppositeColor: function(color) {
-    if (color === enums.states.BLACK) return enums.states.WHITE;
-    if (color === enums.states.WHITE) return enums.states.BLACK;
-    else return color;
-  }
-}
-
-otre.math = {
-  abs: function(num) {
-    if (num >= 0) return num;
-    else return num * -1;
-  },
-  max: function(num1, num2) {
-    if (num1 > num2) return num1;
-    else return num2;
-  },
-  min: function(num1, num2) {
-    if (num1 > num2) return num2;
-    else return num1;
-  },
-  isEven: function(num1) {
-    if ((num1 % 2) == 0) return true;
-    else return false;
-  }
-};
-
 // A better logging solution.
 otre.util.debugl = function(msg) {
   if (otre.debugOn) {
@@ -91,9 +67,7 @@ otre.util.debugl = function(msg) {
   }
 };
 
-
 (function () {
-
 // Private None Class
 var None = function() {}
 None.prototype = {
@@ -102,11 +76,9 @@ None.prototype = {
   }
 };
 
-// We only need to create one instance!
+// We only need to create one instance of None.
 otre.util.none = new None();
 })();
-
-
 // </otre_lib>
 
 })();

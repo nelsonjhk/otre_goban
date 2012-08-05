@@ -2,9 +2,7 @@
 var util = otre.util;
 var enums = otre.enums;
 
-// <otre_lib>
-(function() {
-otre.rules.generic_logic = {
+otre.controllers.generic_logic = {
   getInstance: function() {
     return new GenericLogic();
   },
@@ -22,8 +20,9 @@ var GenericLogic = function(intersections, sgfString) {
 
 GenericLogic.prototype = {
   initialize: function(intersections, sgfString) {
-    this._goban = otre.rules.goban.getInstance(intersections);
     this._movetree = otre.sgf.movetree.getFromSgf(sgfString);
+    this._goban = otre.controller.goban.getInstance(
+        this._movetree.getIntersections);
     // Initialize the goban with placements
     // TODO
     return this;
@@ -32,8 +31,4 @@ GenericLogic.prototype = {
   addStone: function(pt, color) {
   }
 };
-
-})();
-// </otre_lib>
-
 })();
