@@ -1,7 +1,4 @@
 (function() {
-var enums = otre.enums;
-
-// <otre_lib>
 // A utility method -- for prototypal inheritence.
 if (typeof Object.beget !== 'function') {
   Object.beget = function (o) {
@@ -79,7 +76,3 @@ None.prototype = {
 // We only need to create one instance of None.
 otre.util.none = new None();
 })();
-// </otre_lib>
-
-})();
-

@@ -1,6 +1,5 @@
-var util = otre.util;
- 
 otre.util_test = function() {
+  var util = otre.util;
   test("typeOf test", function() { 
     equal(util.typeOf({}), "object", "expect object");
   });
