@@ -1,4 +1,3 @@
-(function() {
 // A utility method -- for prototypal inheritence.
 if (typeof Object.beget !== 'function') {
   Object.beget = function (o) {

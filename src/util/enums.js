@@ -24,3 +24,4 @@ otre.enums = {
     INCORRECT: "Incorrect"
   }
 };
+var enums = otre.enums;
