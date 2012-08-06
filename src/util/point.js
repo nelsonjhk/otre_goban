@@ -1,6 +1,3 @@
-// <otre_lib>
-// Point data structure
-
 (function() {
 // Might consider being smarter and caching points.
 otre.util.point = function(x,y) {
@@ -59,4 +56,3 @@ otre.util.pointFromHash = function(int) {
   return otre.util.point((int / 100 << 0) - 1, (int % 100) - 1);
 };
 })();
-// </otre_lib>
