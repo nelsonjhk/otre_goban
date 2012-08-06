@@ -3,11 +3,16 @@ otre.display = {
 };
 
 var Display = function(logic, divName) {
-  // The logical-communicator.
   this.guiFactory = otre.display.guiFactory(logic, divName);
 };
 
 var GuiFactory = function(divName) {
   this.env = otre.display.getEnvironment(divName, logic)
-  this.paper = ...;
+  //this.paper = ...;
+};
+
+GuiFactory.prototype = {
+  initializeEnvironment: function() {
+    this.env.initialize();   
+  }
 };
