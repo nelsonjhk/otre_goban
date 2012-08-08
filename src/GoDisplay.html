@@ -13,13 +13,18 @@
     <script type="text/javascript" src="util/util.js"></script>
     <script type="text/javascript" src="util/logger.js"></script>
 
+
     <!-- Rules -->
-    <script type="text/javascript" src="rules/rules.js"></script>
     <script type="text/javascript" src="rules/goban.js"></script>
 
     <script type="text/javascript" src="sgf/sgf.js"></script>
     <script type="text/javascript" src="sgf/sgf_grammar.js"></script>
     <script type="text/javascript" src="sgf/movetree.js"></script>
+
+    <!-- Display -->
+    <script type="text/javascript" src="rules/display.js"></script>
+    <script type="text/javascript" src="rules/bbox.js"></script>
+    <script type="text/javascript" src="rules/enviroment.js"></script>
 
     <!-- <script type="text/javascript" src="otre_client.js"></script> -->
     <!-- <script type="text/javascript" src="otre_compiled.js"></script> -->
@@ -31,27 +36,11 @@
         height: 400px;
         float: left;
       }
-
-      #otreLogger {
-        position: relative;
-        padding: 10;
-        width: 300px;
-        top: 20px;
-        border: 1px solid gray;
-        float: right;
-        font-family: Courier;
-        font-size: 75%;
-      }
     </style>
   </head>
 
-
   <body>
-
     <div id="wrap" style="position:relative;">
-      <div id="otreLogger">
-        <center> <h3> ::: Display Log ::: </h3> </center>
-      </div>
       <div id="otre_display">
         <script type="text/javascript">
           //parsing test

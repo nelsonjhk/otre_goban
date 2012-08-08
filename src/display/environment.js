@@ -16,16 +16,16 @@ var GuiEnvironment = function(options) {
 GuiEnvironment.prototype = {
   // Initialize all the bounding boxes for a simple board.
   initializeSimpleBoard: function() {
-    return this.initialize(false /* use menu bar */);
+    return this._initialize(false /* use menu bar */);
   },
 
   // Initialize all the bounding boxes 
   initializeMenuBoard: function() {
-  
+    return this._initialize(true /* use menu bar*/);
   },
 
   // Initialize the internal variables that tell where to place the go broard.
-  initialize: function(useMenuBar) {
+  _initialize: function(useMenuBar) {
     var divHeight = this.divHeight,
         divWidth  = this.divWidth,
 
@@ -72,11 +72,14 @@ GuiEnvironment.prototype = {
         leftExt   = (cropbox.topLeft.x > 1) ? spacing / 2 : 0,
         rightExt  = (cropbox.botRight.x < maxIntersects) ? spacing / 2 : 0;
 
-    this.divBox = util.bbox(util.point(0, 0), util.point(divWidth, divHeight));
-    this.goBoardBox = util.bbox(
+    var display = otre.display;
+    this.divBox = display.bbox(util.point(0, 0), util.point(divWidth, divHeight));
+    this.goBoardBox = display.bbox(
         util.point(leftEdge, topEdge), util.point(rightEdge, botEdge));
-    this.goBoardLineBox = util.bbox(
+    this.goBoardLineBox = display.bbox(
         util.point(left, top), util.point(right, bot));
+    this.lineSpacing = spacing;
+
     // TODO: MenuBar Box
 
     return this;
