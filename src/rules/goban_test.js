@@ -49,4 +49,30 @@ otre.rules.goban_test = function() {
     deepEqual(result.captures[0].toString(), otre.util.point(1,2).toString(),
         "must have captured the white stone");
   });
+
+  test("Capture -- side", function() {
+    var test_goban = rules.goban.getInstance(9);
+    test_goban.addStone(util.point(0, 1), BLACK);
+    test_goban.addStone(util.point(0, 3), BLACK);
+    test_goban.addStone(util.point(0, 2), WHITE);
+    var result = test_goban.addStone(util.point(1, 2), BLACK);
+
+    deepEqual(result.captures.length, 1, "captures array must be only 1 long");
+    ok(result.successful, "must be be successful");
+    deepEqual(result.captures[0].toString(), otre.util.point(0,2).toString(),
+        "must have captured the white stone");
+  });
+
+  test("Capture -- corner", function() {
+    var test_goban = rules.goban.getInstance(9);
+    test_goban.addStone(util.point(0, 1), BLACK);
+    test_goban.addStone(util.point(0, 0), WHITE);
+    var result = test_goban.addStone(util.point(1, 0), BLACK);
+
+    deepEqual(result.captures.length, 1, "captures array must be only 1 long");
+    ok(result.successful, "must be be successful");
+    deepEqual(result.captures[0].toString(), otre.util.point(0,0).toString(),
+        "must have captured the white stone");
+  });
+
 };
