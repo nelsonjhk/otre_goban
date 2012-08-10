@@ -81,7 +81,7 @@ Goban.prototype = {
   // intersection (a point) where the stone is to be placed, and the color of
   // the stone to be placed.
   //
-  // addStane always returns a StoneResult object.
+  // addStone always returns a StoneResult object.
   //
   // A diagram of a StoneResult:
   // {
