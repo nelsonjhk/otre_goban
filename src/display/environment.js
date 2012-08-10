@@ -29,8 +29,6 @@ GuiEnvironment.prototype = {
     var divHeight = this.divHeight,
         divWidth  = this.divWidth,
 
-        // onboard, top, bot, left, right:
-        // textarea      = "bot"
         squareEdge    = otre.math.min(divHeight, divWidth),
         menubarPercent = useMenuBar ? 10 : 0,
         boardSide   = squareEdge * (1 - menubarPercent),
@@ -73,15 +71,19 @@ GuiEnvironment.prototype = {
         rightExt  = (cropbox.botRight.x < maxIntersects) ? spacing / 2 : 0;
 
     var display = otre.display;
-    this.divBox = display.bbox(util.point(0, 0), util.point(divWidth, divHeight));
-    this.goBoardBox = display.bbox(
+
+    this.divBox = display.bboxFromPts(
+        util.point(0, 0), util.point(divWidth, divHeight));
+
+    this.goBoardBox = display.bboxFromPts(
         util.point(leftEdge, topEdge), util.point(rightEdge, botEdge));
+
     this.goBoardLineBox = display.bbox(
         util.point(left, top), util.point(right, bot));
+
     this.lineSpacing = spacing;
 
     // TODO: MenuBar Box
-
     return this;
   },
 

@@ -5,6 +5,15 @@ otre.display.bboxFromPts = function(topLeftPt, botRightPt) {
   return new BoundingBox(topLeftPt, botRightPt);
 };
 
+otre.display.bbox = function(topLeft, width, height) {
+  return new BoundingBox(
+    topLeft,
+    otre.util.point(
+        topLeft.x + width,
+        topLeft.y + height));
+}
+
+
 // A bounding box, generally for a graphical object.
 var BoundingBox = function(topLeftPt, botRightPt) {
   this.topLeft = topLeftPt;

@@ -293,7 +293,9 @@ MoveTree.prototype = {
   },
 
   //TODO
-  deleteCurrentNode: function() {},
+  deleteCurrentNode: function() {
+       
+  },
 
   recurse: function(func) {
     otre.sgf.movetree._searchMoveTreeDFS(this, func);
