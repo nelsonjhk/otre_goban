@@ -1,6 +1,7 @@
 // bounding box
 // Perhaps this should be moved to display?
 (function() {
+var util = otre.util;
 otre.display.bboxFromPts = function(topLeftPt, botRightPt) {
   return new BoundingBox(topLeftPt, botRightPt);
 };
@@ -27,9 +28,16 @@ var BoundingBox = function(topLeftPt, botRightPt) {
 
 
 BoundingBox.prototype = {
-  drawBox: function(paper) {
-     return 
-        paper.rect(this.topLeft.x, this.topLeft.y, this.width, this.height);
+  draw: function(paper, color) {
+    var obj = paper.rect(this.topLeft.x, this.topLeft.y, this.width, this.height)
+    obj.attr({fill:color});
+  },
+
+  log: function() {
+    util.logz(this.topLeft);
+    util.logz(this.botRight);
+    util.logz(this.width);
+    util.logz(this.height);
   }
 };
 

@@ -1,96 +1,128 @@
-(function() { 
+(function() {
 var util = otre.util;
+var enums = otre.enums;
 
-otre.display.getEnvironment = function(divName) {
-  return (new GuiEnvironment()).initialize();
+otre.display.getEnvironment = function(options) {
+  return (new GuiEnvironment(options)).initialize();
 };
 
 var GuiEnvironment = function(options) {
-  this.divName = options.divName;
-  this.intersections = options.intersections;
-  this.cropBox = options.cropBox;
-  this.divHeight = options.divHeight;
-  this.divWidth = options.divWidth;
+  this.divId = options.divId;
+  this.intersections = options.intersections || 19;
+  this.displayType = options.displayType || enums.displayTypes.SIMPLE_BOARD;
+  this.cropbox = options.cropbox || this.getCropboxFromRegion(
+      options.displayRegion);
+
+  // We allow the divHeight and divWidth to be specified explicitly, primarily
+  // because it's extremely useful for testing.
+  this.divHeight = options.divHeight || ($("#" + this.divId).innerHeight());
+  this.divWidth = options.divWidth || ($("#" + this.divId).innerWidth());
 };
 
 GuiEnvironment.prototype = {
-  // Initialize all the bounding boxes for a simple board.
-  initializeSimpleBoard: function() {
-    return this._initialize(false /* use menu bar */);
-  },
-
-  // Initialize all the bounding boxes 
-  initializeMenuBoard: function() {
-    return this._initialize(true /* use menu bar*/);
+  getCropBoxFromRegion: function(optRegion) {
+    var boardRegions = enums.boardRegions;
+    var region = optRegion || boardRegions.ALL;
   },
 
   // Initialize the internal variables that tell where to place the go broard.
-  _initialize: function(useMenuBar) {
-    var divHeight = this.divHeight,
+  initialize: function() {
+    var display = otre.display,
+        divHeight = this.divHeight,
         divWidth  = this.divWidth,
+        cropbox   = this.cropbox,
+        displayType = this.displayType,
+        dirs = enums.directions,
 
-        squareEdge    = otre.math.min(divHeight, divWidth),
-        menubarPercent = useMenuBar ? 10 : 0,
-        boardSide   = squareEdge * (1 - menubarPercent),
-        menubarHeight = squareEdge * (menubarPercent),
+        // The box for the entire div
+        divBox = display.bboxFromPts(
+            util.point(0, 0), // top left
+            util.point(divWidth, divHeight)), // bottom rigt
 
-        boardHeight = boardSide,
-        totalHeight = boardSide + menubarHeight,
-        boardWidth  = boardSide,
-        leftEdge    = (divWidth - boardWidth) / 2,
-        rightEdge   = divWidth - leftEdge,
-        topEdge     = (divHeight - totalHeight) / 2,
-        botEdge     = divHeight - topEdge,
+        topBar = this._getSidebarBox(displayType, divBox, dirs.TOP),
+        leftBar = this._getSidebarBox(displayType, divBox, dirs.LEFT),
+        bottomBar = this._getSidebarBox(displayType, divBox, dirs.BOTTOM),
+        rightBar = this._getSidebarBox(displayType, divBox, dirs.RIGHT),
 
-        // center of the Go Board;
-        center = otre.util.point(
-            (boardWidth / 2) + leftEdge, (boardHeight / 2) + topEdge),
+        goBoardBox = this._getBoardBox(
+            topBar.botRight.y, leftBar.botRight.x,
+            bottomBar.topLeft.y, rightBar.topLeft.x),
 
-        xpoints   = cropbox.botRight.x - cropbox.topLeft.x + 1,
-        ypoints   = cropbox.botRight.y - cropbox.topLeft.y + 1,
+        goBoardLineBox = this._getGoBoardLineBox(divBox, cropbox);
+        
+    // Move the bars based on the leftover height and width.
+    topBar.topLeft.y = topBar.topLeft.y - goBoardBox.topLeft.y;
+    leftBar.topLeft.x = goBoardBox.topLeft.x;
+    bottomBar.topLeft.y = goBoardBox.botRight.y;
+    rightBar.topLeft.x
 
-        spacing   = boardSide / (xpoints + 1/3),
+    lineBox = _getLineBox(goBoardBox);
 
-        edgeAmount = 2/3 * spacing,
-        edgeSpace = spacing - edgeAmount,
-        lineLength = boardSide - 2 * edgeAmount,
-
-        // different if cropbox makes a rectangle
-        xbuffer   = leftEdge + edgeAmount,
-        ybuffer   = topEdge + edgeAmount,
-
-        top       = ybuffer,
-        bot       = top + lineLength,
-        left      = xbuffer,
-        right     = left + lineLength,
-        width     = right - left,
-        height    = bot - top,
-        topExt    = (cropbox.topLeft.y > 1) ? spacing / 2 : 0,
-        botExt    = (cropbox.botRight.y < maxIntersects) ? spacing / 2 : 0,
-        leftExt   = (cropbox.topLeft.x > 1) ? spacing / 2 : 0,
-        rightExt  = (cropbox.botRight.x < maxIntersects) ? spacing / 2 : 0;
-
-    var display = otre.display;
-
-    this.divBox = display.bboxFromPts(
-        util.point(0, 0), util.point(divWidth, divHeight));
-
-    this.goBoardBox = display.bboxFromPts(
-        util.point(leftEdge, topEdge), util.point(rightEdge, botEdge));
-
-    this.goBoardLineBox = display.bbox(
-        util.point(left, top), util.point(right, bot));
-
-    this.lineSpacing = spacing;
+    // not sure wh
+    //this.paper = Raphael(this.divId, "100%", "100%")
 
     // TODO: MenuBar Box
     return this;
   },
 
   resetDivDimensions: function() {
-    this.divHeight  = ($("#" + this.divName).innerHeight());
-    this.divWidth   = ($("#" + this.divName).innerWidth());
+    this.divHeight  = ($("#" + this.divId).innerHeight());
+    this.divWidth   = ($("#" + this.divId).innerWidth());
     return this.initialize();
+  },
+
+  // Get the bounding box of the side.
+  _getSidebarBox: function(displayType, divBox, direction) {
+    var dirs = enums.directions,
+        dispt = enums.displayTypes,
+        top = divBox.topLeft.y,
+        bot = divBox.botRight.y,
+        left = divBox.topLeft.x,
+        right = divbox.botRight.x;
+
+      // LEFT and RIGHT not yet used, so let width = 0
+    if (direction === dirs.LEFT) {
+      right = divBox.topLeft.x;
+    } else if (direction === dirs.RIGHT) {
+      left = divBox.botRight.x;
+    } else if (direction === dirs.TOP) {
+      bot = divBox.topLeft.y
+      if (displayType === dispt.EXPLAIN_BOARD) {
+        bot = 0.05 * divBox.height;
+      }
+    } else if (direction === dirs.BOT) {
+      top = divBox.botRight.y
+      if (displayType === dispt.EXPLAIN_BOARD) {
+        top = divBox.height * 0.95;
+      }
+    } else {
+      return otre.display.bbox(util.point(0,0), 0, 0);
+    }
+
+    return otre.display.bboxFromPts(
+        util.point(left, top), util.point(right, bot));
+  },
+
+  _getGoBoardBox: function(top, left, bot, right) {
+    var height = bot - top,
+        width = right - left,
+        side = otre.math.min(height, width),
+        heightRemain = height - side,
+        widthRemain = width - side,
+        newLeft = left + widthRemain / 2,
+        newRight = newLeft + side,
+        newTop = top + heightRemain / 2,
+        newBot = newTop + side;
+    return otre.display.bboxFromPts(
+        util.point(left, top), util.point(right, bot));
+  },
+
+  _getGoBoardLineBox: function(boardBox, cropbox) {
+
+  },
+
+  _debugDrawAll: function() {
+    this.divBox.draw(this.paper, 'red');
   }
 };
 
