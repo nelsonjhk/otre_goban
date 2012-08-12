@@ -23,8 +23,8 @@ otre.enums = {
     LEFT: 1,
     RIGHT: 2,
     TOP: 3,
-    BOTTOM: 4,
-  }
+    BOTTOM: 4
+  },
   
   // The directions should work with the boardRegions.
   boardRegions: {
@@ -36,7 +36,7 @@ otre.enums = {
     TOP_RIGHT: 6,
     BOTTOM_LEFT: 7,
     BOTTOM_RIGHT: 8,
-    ALL: 9;
+    ALL: 9
   }
 };
 var enums = otre.enums;
