@@ -25,7 +25,7 @@ otre.enums = {
     TOP: 3,
     BOTTOM: 4
   },
-  
+
   // The directions should work with the boardRegions.
   boardRegions: {
     LEFT: 1,

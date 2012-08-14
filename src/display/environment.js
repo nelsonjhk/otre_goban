@@ -2,16 +2,21 @@
 var util = otre.util;
 var enums = otre.enums;
 
-otre.display.getEnvironment = function(options) {
-  return (new GuiEnvironment(options)).initialize();
+otre.display.environment = {
+  get: function(options) {
+    return new GuiEnvironment(options);
+  },
+
+  getInitialized: function(options) {
+    return new (GuiEnvironment(options)).initialize();
+  },
 };
 
 var GuiEnvironment = function(options) {
   this.divId = options.divId;
-  this.intersections = options.intersections || 19;
   this.displayType = options.displayType || enums.displayTypes.SIMPLE_BOARD;
   this.cropbox = options.cropbox || this.getCropboxFromRegion(
-      options.displayRegion);
+      options.displayRegion, options.intersections);
 
   // We allow the divHeight and divWidth to be specified explicitly, primarily
   // because it's extremely useful for testing.
@@ -20,11 +25,6 @@ var GuiEnvironment = function(options) {
 };
 
 GuiEnvironment.prototype = {
-  getCropBoxFromRegion: function(optRegion) {
-    var boardRegions = enums.boardRegions;
-    var region = optRegion || boardRegions.ALL;
-  },
-
   // Initialize the internal variables that tell where to place the go broard.
   initialize: function() {
     var display = otre.display,
@@ -48,24 +48,24 @@ GuiEnvironment.prototype = {
             topBar.botRight.y, leftBar.botRight.x,
             bottomBar.topLeft.y, rightBar.topLeft.x),
 
+        // TODO
         goBoardLineBox = this._getGoBoardLineBox(divBox, cropbox);
-        
+
     // Move the bars based on the leftover height and width.
-    topBar.topLeft.y = topBar.topLeft.y - goBoardBox.topLeft.y;
-    leftBar.topLeft.x = goBoardBox.topLeft.x;
-    bottomBar.topLeft.y = goBoardBox.botRight.y;
-    rightBar.topLeft.x
+    topBar.topLeft.y = topBar.topLeft.y + 
+        (goBoardBox.topLeft.y - topBar.botRight.y);
+    leftBar.topLeft.x = leftBar.topLeft.x + 
+        (goBoardBox.topLeft.x - leftBar.botRight.x);
+    bottomBar.topLeft.y = bottomBar.botRight.y - 
+        (bottomBar.topLeft.y - goBoardBox.botRight.y);
+    rightBar.topLeft.x = rightBar.botRight.x - 
+        (bottomBar.topLeft.x - goBoardBox.botRight.x);
 
-    lineBox = _getLineBox(goBoardBox);
-
-    // not sure wh
     //this.paper = Raphael(this.divId, "100%", "100%")
-
-    // TODO: MenuBar Box
     return this;
   },
 
-  resetDivDimensions: function() {
+  resetDimensions: function() {
     this.divHeight  = ($("#" + this.divId).innerHeight());
     this.divWidth   = ($("#" + this.divId).innerWidth());
     return this.initialize();

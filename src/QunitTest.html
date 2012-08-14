@@ -36,6 +36,15 @@
 <script type="text/javascript" src="controllers/generic_controller.js"></script>
 <script type="text/javascript" src="controllers/generic_controller_test.js"></script>
 
+<!-- Display Tests-->
+<script type="text/javascript" src="display/display.js"></script>
+<script type="text/javascript" src="display/bbox.js"></script>
+<script type="text/javascript" src="display/bbox_test.js"></script>
+<script type="text/javascript" src="display/cropbox.js"></script>
+<script type="text/javascript" src="display/cropbox_test.js"></script>
+<script type="text/javascript" src="display/environment.js"></script>
+<script type="text/javascript" src="display/environment_test.js"></script>
+
 <script>
 $(document).ready(function() {
   // otre.debugOn = true;
@@ -43,6 +52,9 @@ $(document).ready(function() {
   otre.sgf.movetree_test();
   otre.rules.goban_test();
   otre.controllers.generic_controller_test();
+  otre.display.bbox_test();
+  otre.display.cropbox_test();
+  otre.display.environment_test();
 });
 </script>
 
